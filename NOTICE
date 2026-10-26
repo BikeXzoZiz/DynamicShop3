@@ -1,0 +1,18 @@
+DynamicShop3 (modernized fork)
+Copyright (c) 2023 7sat
+Copyright (c) 2026 Teerachot
+
+This product includes software developed as DynamicShop3 by 7sat
+(https://github.com/7sat/DynamicShop3), licensed under the MIT License
+(see LICENSE). The original free-version resource is published at
+https://www.spigotmc.org/resources/65603/.
+
+This fork is a continuation of that work under the same MIT License;
+it is not affiliated with, endorsed by, or connected to the original
+author's premium offering.
+
+Third-party components bundled at build time (shaded & relocated):
+
+- bStats (org.bstats) - MIT - https://bstats.org
+- opencsv (com.opencsv) - Apache 2.0 - https://opencsv.sourceforge.net
+- commons-io - Apache 2.0 - https://commons.apache.org/proper/commons-io
