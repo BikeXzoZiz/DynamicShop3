@@ -27,6 +27,22 @@ public final class WorthUtil
         ccWorth.save();
     }
 
+    // worth 데이터 조회. 없으면 재질 이름의 '-'와 '_'를 제거하고 소문자로 바꿔서 다시 조회함.
+    public static double getRecommendedWorth(String itemName)
+    {
+        double worth = ccWorth.get().getDouble(itemName);
+        if (worth == 0)
+            worth = ccWorth.get().getDouble(normalizeWorthKey(itemName));
+
+        return worth;
+    }
+
+    // 추천 가격 데이터가 없을 때 안내문에 표시할 조회용 키 (정규화된 이름).
+    public static String normalizeWorthKey(String itemName)
+    {
+        return itemName.replace("-", "").replace("_", "").toLowerCase();
+    }
+
     // 번들된 기본 worth 데이터를 Worth_V2 파일에 병합한다. (유저가 수정한 기존 값은 유지)
     private static void addWorthDefaults(String resourcePath)
     {

@@ -419,15 +419,9 @@ public final class ItemPalette extends InGameUI
                 if (applyRecommend)
                 {
                     String itemName = itemStack.getType().toString();
-                    worth = WorthUtil.ccWorth.get().getDouble(itemName);
+                    worth = WorthUtil.getRecommendedWorth(itemName);
                     if (worth == 0)
-                    {
-                        itemName = itemName.replace("-", "");
-                        itemName = itemName.replace("_", "");
-                        itemName = itemName.toLowerCase();
-
-                        worth = WorthUtil.ccWorth.get().getDouble(itemName);
-                    }
+                        itemName = WorthUtil.normalizeWorthKey(itemName);
 
                     if (worth != 0)
                     {

@@ -521,17 +521,7 @@ public final class ItemSettings extends InGameUI
 
     private double TryGetWorth(String itemName)
     {
-        double worth = WorthUtil.ccWorth.get().getDouble(itemName);
-        if (worth == 0)
-        {
-            itemName = itemName.replace("-", "");
-            itemName = itemName.replace("_", "");
-            itemName = itemName.toLowerCase();
-
-            worth = WorthUtil.ccWorth.get().getDouble(itemName);
-        }
-
-        return worth;
+        return WorthUtil.getRecommendedWorth(itemName);
     }
 
     private void ChangeTab(int tabIndex)

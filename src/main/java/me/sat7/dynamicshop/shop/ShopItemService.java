@@ -490,15 +490,9 @@ public final class ShopItemService
 
                 String itemName = data.get().getString(itemIndex + ".mat");
 
-                double worth = WorthUtil.ccWorth.get().getDouble(itemName);
+                double worth = WorthUtil.getRecommendedWorth(itemName);
                 if (worth == 0)
-                {
-                    itemName = itemName.replace("-", "");
-                    itemName = itemName.replace("_", "");
-                    itemName = itemName.toLowerCase();
-
-                    worth = WorthUtil.ccWorth.get().getDouble(itemName);
-                }
+                    itemName = WorthUtil.normalizeWorthKey(itemName);
 
                 if (worth != 0)
                 {
