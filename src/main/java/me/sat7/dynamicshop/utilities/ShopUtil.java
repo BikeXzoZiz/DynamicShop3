@@ -803,7 +803,7 @@ public final class ShopUtil
     public static void closeInventoryWithDelay(Player player)
     {
         //todo 왜 이렇게 만들었을까??? 2틱 딜레이가 필요한 이유가 뭐지?
-        Bukkit.getScheduler().runTaskLater(DynamicShop.plugin, player::closeInventory, 2);
+        Bukkit.getScheduler().runTaskLater(DynamicShop.plugin, (Runnable) player::closeInventory, 2);
     }
 
     public static void SetToRecommendedValueAll(String shop, CommandSender sender)
