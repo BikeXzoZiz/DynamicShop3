@@ -39,10 +39,10 @@ public class Optional implements CommandExecutor
 
             if (args.length == 0)
             {
-                Bukkit.dispatchCommand(sender, "DynamicShop shop");
+                Bukkit.dispatchCommand(sender, "ds shop");
             } else
             {
-                Bukkit.dispatchCommand(sender, "DynamicShop shop " + args[0]);
+                Bukkit.dispatchCommand(sender, "ds shop " + args[0]);
             }
         }
 

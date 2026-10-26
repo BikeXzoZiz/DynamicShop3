@@ -395,10 +395,10 @@ public final class ShopSettings extends InGameUI
         {
             if (data.get().getBoolean("Options.enable", true))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " enable false");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " enable false");
             } else
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " enable true");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " enable true");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -407,10 +407,10 @@ public final class ShopSettings extends InGameUI
         {
             if (data.get().getString("Options.permission").isEmpty())
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " permission true");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " permission true");
             } else
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " permission false");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " permission false");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -425,13 +425,13 @@ public final class ShopSettings extends InGameUI
                 targetValue = oldvalue + 1;
                 if (e.isShiftClick()) targetValue += 4;
                 if (targetValue >= 20) targetValue = 20;
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " maxpage " + targetValue);
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " maxpage " + targetValue);
             } else
             {
                 targetValue = oldvalue - 1;
                 if (e.isShiftClick()) targetValue -= 4;
                 if (targetValue <= 1) targetValue = 1;
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " maxpage " + targetValue);
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " maxpage " + targetValue);
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -459,7 +459,7 @@ public final class ShopSettings extends InGameUI
 
                 if (e.getSlot() == SHOP_HOUR)
                 {
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " shophours 0 0");
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " shophours 0 0");
                 } else if (e.getSlot() == SHOP_HOUR_OPEN)
                 {
                     open += edit;
@@ -477,7 +477,7 @@ public final class ShopSettings extends InGameUI
 
                     open = Clamp(open, 1, 24);
 
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " shophours " + open + " " + close);
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " shophours " + open + " " + close);
                 } else if (e.getSlot() == SHOP_HOUR_CLOSE)
                 {
                     close += edit;
@@ -495,7 +495,7 @@ public final class ShopSettings extends InGameUI
 
                     close = Clamp(close, 1, 24);
 
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " shophours " + open + " " + close);
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " shophours " + open + " " + close);
                 }
 
                 DynaShopAPI.openShopSettingGui(player, shopName);
@@ -503,7 +503,7 @@ public final class ShopSettings extends InGameUI
             {
                 if (e.getSlot() == SHOP_HOUR)
                 {
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " shophours 20 6");
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " shophours 20 6");
                     DynaShopAPI.openShopSettingGui(player, shopName);
                 }
             }
@@ -520,7 +520,7 @@ public final class ShopSettings extends InGameUI
                 {
                     if(e.isLeftClick())
                     {
-                        Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " fluctuation off");
+                        Bukkit.dispatchCommand(player, "ds shop " + shopName + " fluctuation off");
                     }
                     else if(e.isRightClick())
                     {
@@ -536,7 +536,7 @@ public final class ShopSettings extends InGameUI
                     interval += edit;
                     interval = Clamp(interval, 1, 999);
 
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " fluctuation " + interval + " " + strength);
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " fluctuation " + interval + " " + strength);
                 } else if (e.getSlot() == FLUC_STRENGTH)
                 {
                     double edit = -0.1;
@@ -547,7 +547,7 @@ public final class ShopSettings extends InGameUI
                     strength = Clamp(strength, 0.1, 64);
                     strength = Math.round(strength * 100) / 100.0;
 
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " fluctuation " + interval + " " + strength);
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " fluctuation " + interval + " " + strength);
                 }
 
                 DynaShopAPI.openShopSettingGui(player, shopName);
@@ -557,7 +557,7 @@ public final class ShopSettings extends InGameUI
                 {
                     if(e.isLeftClick())
                     {
-                        Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " fluctuation 48 0.1");
+                        Bukkit.dispatchCommand(player, "ds shop " + shopName + " fluctuation 48 0.1");
                         DynaShopAPI.openShopSettingGui(player, shopName);
                     }
                     else if(e.isRightClick())
@@ -579,7 +579,7 @@ public final class ShopSettings extends InGameUI
                 {
                     if(e.isLeftClick())
                     {
-                        Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " stockStabilizing off");
+                        Bukkit.dispatchCommand(player, "ds shop " + shopName + " stockStabilizing off");
                     }
                     else if(e.isRightClick())
                     {
@@ -595,7 +595,7 @@ public final class ShopSettings extends InGameUI
                     interval += edit;
                     interval = Clamp(interval, 1, 999);
 
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " stockStabilizing " + interval + " " + strength);
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " stockStabilizing " + interval + " " + strength);
                 } else if (e.getSlot() == STABLE_STRENGTH)
                 {
                     double edit = -0.1;
@@ -606,7 +606,7 @@ public final class ShopSettings extends InGameUI
                     strength = Clamp(strength, 0.1, 25);
                     strength = (Math.round(strength * 100) / 100.0);
 
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " stockStabilizing " + interval + " " + strength);
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " stockStabilizing " + interval + " " + strength);
                 }
 
                 DynaShopAPI.openShopSettingGui(player, shopName);
@@ -616,7 +616,7 @@ public final class ShopSettings extends InGameUI
                 {
                     if(e.isLeftClick())
                     {
-                        Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " stockStabilizing 48 0.5");
+                        Bukkit.dispatchCommand(player, "ds shop " + shopName + " stockStabilizing 48 0.5");
                         DynaShopAPI.openShopSettingGui(player, shopName);
                     }
                     else if(e.isRightClick())
@@ -661,10 +661,10 @@ public final class ShopSettings extends InGameUI
         {
             if (data.get().contains("Options.flag.signshop"))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag signShop unset");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag signShop unset");
             } else
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag signShop set");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag signShop set");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -673,10 +673,10 @@ public final class ShopSettings extends InGameUI
         {
             if (data.get().contains("Options.flag.localshop"))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag localShop unset");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag localShop unset");
             } else
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag localShop set");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag localShop set");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -685,10 +685,10 @@ public final class ShopSettings extends InGameUI
         {
             if (data.get().contains("Options.flag.deliverycharge"))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag deliveryCharge unset");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag deliveryCharge unset");
             } else
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag deliveryCharge set");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag deliveryCharge set");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -697,10 +697,10 @@ public final class ShopSettings extends InGameUI
         {
             if (data.get().contains("Options.flag.showvaluechange"))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag showValueChange unset");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag showValueChange unset");
             } else
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag showValueChange set");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag showValueChange set");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -709,10 +709,10 @@ public final class ShopSettings extends InGameUI
         {
             if (data.get().contains("Options.flag.hidestock"))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag hideStock unset");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag hideStock unset");
             } else
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag hideStock set");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag hideStock set");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -721,10 +721,10 @@ public final class ShopSettings extends InGameUI
         {
             if (data.get().contains("Options.flag.hidepricingtype"))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag hidePricingType unset");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag hidePricingType unset");
             } else
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag hidePricingType set");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag hidePricingType set");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -733,10 +733,10 @@ public final class ShopSettings extends InGameUI
         {
             if (data.get().contains("Options.flag.hideshopbalance"))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag hideShopBalance unset");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag hideShopBalance unset");
             } else
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag hideShopBalance set");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag hideShopBalance set");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -745,10 +745,10 @@ public final class ShopSettings extends InGameUI
         {
             if (data.get().contains("Options.flag.showmaxstock"))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag showMaxStock unset");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag showMaxStock unset");
             } else
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag showMaxStock set");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag showMaxStock set");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -757,10 +757,10 @@ public final class ShopSettings extends InGameUI
         {
             if (data.get().contains("Options.flag.hiddenincommand"))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag hiddenInCommand unset");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag hiddenInCommand unset");
             } else
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag hiddenInCommand set");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag hiddenInCommand set");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -771,10 +771,10 @@ public final class ShopSettings extends InGameUI
             {
                 if (data.get().contains("Options.log.active") && data.get().getBoolean("Options.log.active"))
                 {
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " log disable");
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " log disable");
                 } else
                 {
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " log enable");
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " log enable");
                 }
 
                 DynaShopAPI.openShopSettingGui(player, shopName);
@@ -786,7 +786,7 @@ public final class ShopSettings extends InGameUI
         {
             boolean active = data.get().contains("Options.log.printToConsole") && data.get().getBoolean("Options.log.printToConsole");
 
-            Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " log printToConsole " + (active ? "off" : "on"));
+            Bukkit.dispatchCommand(player, "ds shop " + shopName + " log printToConsole " + (active ? "off" : "on"));
 
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -794,7 +794,7 @@ public final class ShopSettings extends InGameUI
         {
             boolean active = data.get().contains("Options.log.printToAdmin") && data.get().getBoolean("Options.log.printToAdmin");
 
-            Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " log printToAdmin " + (active ? "off" : "on"));
+            Bukkit.dispatchCommand(player, "ds shop " + shopName + " log printToAdmin " + (active ? "off" : "on"));
 
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -803,7 +803,7 @@ public final class ShopSettings extends InGameUI
         {
             boolean active = data.get().contains("Options.command.active") && data.get().getBoolean("Options.command.active");
 
-            Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " command active " + (active ? "false" : "true"));
+            Bukkit.dispatchCommand(player, "ds shop " + shopName + " command active " + (active ? "false" : "true"));
 
             DynaShopAPI.openShopSettingGui(player, shopName);
         } else if (e.getSlot() == CMD_SELL)
@@ -814,7 +814,7 @@ public final class ShopSettings extends InGameUI
                 {
                     Object[] indexList = data.get().getConfigurationSection("Options.command.sell").getKeys(false).toArray();
                     int idx = Integer.parseInt(indexList[indexList.length-1].toString());
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " command sell delete " + idx);
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " command sell delete " + idx);
 
                     DynaShopAPI.openShopSettingGui(player, shopName);
                 }
@@ -836,7 +836,7 @@ public final class ShopSettings extends InGameUI
                 {
                     Object[] indexList = data.get().getConfigurationSection("Options.command.buy").getKeys(false).toArray();
                     int idx = Integer.parseInt(indexList[indexList.length-1].toString());
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " command buy delete " + idx);
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " command buy delete " + idx);
 
                     DynaShopAPI.openShopSettingGui(player, shopName);
                 }
@@ -856,14 +856,14 @@ public final class ShopSettings extends InGameUI
         {
             if (data.get().contains("Options.flag.integeronly"))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag integerOnly unset");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag integerOnly unset");
 
                 if(ShopUtil.GetCurrency(data).equalsIgnoreCase(Constants.S_PLAYERPOINT) ||
                    ShopUtil.GetCurrency(data).equalsIgnoreCase(Constants.S_EXP))
-                    Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " currency " + Constants.S_VAULT);
+                    Bukkit.dispatchCommand(player, "ds shop " + shopName + " currency " + Constants.S_VAULT);
             } else
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag integerOnly set");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag integerOnly set");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -872,7 +872,7 @@ public final class ShopSettings extends InGameUI
         {
             if (!currency.equalsIgnoreCase(Constants.S_VAULT))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " currency " + Constants.S_VAULT);
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " currency " + Constants.S_VAULT);
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -881,8 +881,8 @@ public final class ShopSettings extends InGameUI
         {
             if (!currency.equalsIgnoreCase(Constants.S_EXP))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " currency " + Constants.S_EXP);
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag integerOnly set");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " currency " + Constants.S_EXP);
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag integerOnly set");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -897,7 +897,7 @@ public final class ShopSettings extends InGameUI
 
             if (!currency.equalsIgnoreCase(Constants.S_JOBPOINT))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " currency " + Constants.S_JOBPOINT);
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " currency " + Constants.S_JOBPOINT);
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
@@ -912,8 +912,8 @@ public final class ShopSettings extends InGameUI
 
             if (!currency.equalsIgnoreCase(Constants.S_PLAYERPOINT))
             {
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " currency " + Constants.S_PLAYERPOINT);
-                Bukkit.dispatchCommand(player, "DynamicShop shop " + shopName + " flag integerOnly set");
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " currency " + Constants.S_PLAYERPOINT);
+                Bukkit.dispatchCommand(player, "ds shop " + shopName + " flag integerOnly set");
             }
             DynaShopAPI.openShopSettingGui(player, shopName);
         }
