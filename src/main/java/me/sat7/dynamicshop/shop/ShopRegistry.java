@@ -2,9 +2,12 @@ package me.sat7.dynamicshop.shop;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import lombok.NonNull;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,6 +16,10 @@ import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.constants.Constants;
 import me.sat7.dynamicshop.files.CustomConfig;
 import me.sat7.dynamicshop.utilities.ConfigUtil;
+import me.sat7.dynamicshop.utilities.RotationUtil;
+import me.sat7.dynamicshop.utilities.UserUtil;
+
+import static me.sat7.dynamicshop.utilities.LangUtil.t;
 
 /**
  * 단일 소유자(single owner) of the in-memory shop file registry and its
@@ -21,7 +28,8 @@ import me.sat7.dynamicshop.utilities.ConfigUtil;
  * <p>Owns the {@code Shop/*.yml} config map and the per-shop dirty flags.
  * Loads every shop file on boot, tracks unsaved changes, and performs the
  * periodic/forced saves and YML backups. All shop registration changes
- * (create / rename / copy / merge / delete) go through this class.</p>
+ * (create / rename / copy / merge / delete) and shop-level data access
+ * (balance, currency, per-slot commands) go through this class.</p>
  *
  * <p>{@code ShopUtil.shopConfigFiles} and {@code ShopUtil.shopDirty} are
  * legacy aliases to the same live maps, kept while callers are migrated
@@ -58,6 +66,25 @@ public final class ShopRegistry
     public HashMap<String, Boolean> dirtyFlags()
     {
         return shopDirty;
+    }
+
+    // ---------- read access ----------
+
+    // 등록된 상점의 config. 없으면 null.
+    public CustomConfig getShopConfig(String shopName)
+    {
+        return shopConfigFiles.get(shopName);
+    }
+
+    public boolean hasShop(String shopName)
+    {
+        return shopConfigFiles.containsKey(shopName);
+    }
+
+    // 모든 상점을 (이름, config) 쌍으로 순회할때 사용.
+    public Set<Map.Entry<String, CustomConfig>> entries()
+    {
+        return shopConfigFiles.entrySet();
     }
 
     // ---------- registration ----------
@@ -322,6 +349,257 @@ public final class ShopRegistry
                     }
                 }
             }
+        }
+    }
+
+    // ---------- shop-level operations ----------
+
+    // 상점 이름 바꾸기
+    public void renameShop(String shopName, String newName)
+    {
+        CustomConfig data = shopConfigFiles.get(shopName);
+        if (data == null)
+            return;
+
+        data.rename(newName);
+        data.get().set("Options.title", newName);
+        renameRegistration(shopName, newName, data);
+
+        RotationUtil.OnShopNameChanged(shopName, newName);
+        UserUtil.OnRenameShop(shopName, newName);
+    }
+
+    public void copyShop(String shopName, String newName)
+    {
+        CustomConfig data = shopConfigFiles.get(shopName);
+        if (data == null)
+            return;
+
+        data.copy(newName);
+        data.get().set("Options.title", newName);
+        copyRegistration(newName, data);
+
+        RotationUtil.OnShopCopy(shopName, newName);
+    }
+
+    // 상점 병합
+    public void mergeShop(String shopA, String shopB)
+    {
+        // A에 B의 아이템을 다 밀어넣는 방식임.
+        // 상점잔액 합쳐주는것 말고는 별도의 처리 없음
+        CustomConfig dataA = shopConfigFiles.get(shopA);
+        CustomConfig dataB = shopConfigFiles.get(shopB);
+
+        int pg1 = dataA.get().getInt("Options.page");
+        int pg2 = dataB.get().getInt("Options.page");
+
+        dataA.get().set("Options.page", pg1 + pg2);
+        if (dataA.get().contains("Options.Balance") || dataB.get().contains("Options.Balance"))
+        {
+            double a = getShopBalance(shopA);
+            if (a == -1) a = 0;
+
+            double b = 0;
+            if (!(dataA.get().getString("Options.Balance").equals(shopB) || dataB.get().getString("Options.Balance").equals(shopA)))
+            {
+                b = getShopBalance(shopB);
+            }
+
+            if (b == -1) b = 0;
+
+            if (a + b > 0)
+            {
+                dataA.get().set("Options.Balance", a + b);
+            } else
+            {
+                dataA.get().set("Options.Balance", null);
+            }
+        }
+
+        for (String item : dataB.get().getKeys(false))
+        {
+            try
+            {
+                dataA.get().set(String.valueOf(Integer.parseInt(item) + (pg1 * 45)), dataB.get().get(item));
+            } catch (Exception ignored)
+            {
+            }
+        }
+
+        UserUtil.OnMergeShop(shopA, shopB);
+
+        dataB.delete();
+        unregister(shopB);
+
+        dataA.save();
+        dataA.reload();
+    }
+
+    // 상점의 잔액 확인
+    public double getShopBalance(String shopName)
+    {
+        CustomConfig data = shopConfigFiles.get(shopName);
+        if (data == null)
+            return -1;
+
+        // 무한
+        if (!data.get().contains("Options.Balance")) return -1;
+
+        double shopBal;
+
+        try
+        {
+            shopBal = Double.parseDouble(data.get().getString("Options.Balance")); // 파싱에 실패하면 캐치로 가는 방식.
+        }
+        // 연동형
+        catch (Exception ee)
+        {
+            String linkedShop = data.get().getString("Options.Balance");
+
+            // 그런 상점이 없음.
+            CustomConfig linkedShopData = shopConfigFiles.get(linkedShop);
+            if (linkedShopData == null)
+            {
+                data.get().set("Options.Balance", null);
+                data.save();
+                DynamicShop.console.sendMessage(Constants.DYNAMIC_SHOP_PREFIX + shopName + ", " + linkedShop + "/ target shop not found");
+                DynamicShop.console.sendMessage(Constants.DYNAMIC_SHOP_PREFIX + shopName + "/ balance has been reset");
+                return -1;
+            }
+
+            // 연결 대상이 실제 계좌가 아님.
+            try
+            {
+                if (linkedShopData.get().contains("Options.Balance"))
+                {
+                    double temp = Double.parseDouble(linkedShopData.get().getString( "Options.Balance"));
+                } else
+                {
+                    return -1;
+                }
+            } catch (Exception e)
+            {
+                DynamicShop.console.sendMessage(Constants.DYNAMIC_SHOP_PREFIX +
+                        shopName + ", " + linkedShop + "/ " +
+                        t(null, "ERR.SHOP_LINK_TARGET_ERR"));
+
+                data.get().set("Options.Balance", null);
+                data.save();
+
+                DynamicShop.console.sendMessage(Constants.DYNAMIC_SHOP_PREFIX + shopName + "/ balance has been reset");
+                return -1;
+            }
+
+            shopBal = linkedShopData.get().getDouble("Options.Balance");
+        }
+
+        return shopBal;
+    }
+
+    // 상점의 잔액 수정
+    public void addShopBalance(String shopName, double amount)
+    {
+        CustomConfig data = shopConfigFiles.get(shopName);
+        if (data == null)
+            return;
+
+        double old = getShopBalance(shopName);
+        if (old < 0) return;
+
+        double newValue = old + amount;
+        newValue = (Math.round(newValue * 10000) / 10000.0);
+
+        try
+        {
+            Double temp = Double.parseDouble(data.get().getString("Options.Balance"));
+            data.get().set("Options.Balance", newValue);
+        }
+        // 연동형
+        catch (Exception ee)
+        {
+            String linkedShop = data.get().getString("Options.Balance");
+            CustomConfig linkedShopData = shopConfigFiles.get(linkedShop);
+            if (linkedShopData != null)
+                linkedShopData.get().set("Options.Balance", newValue);
+        }
+    }
+
+    public String GetCurrency(@NonNull CustomConfig config)
+    {
+        return GetCurrency(config.get());
+    }
+    public String GetCurrency(@NonNull FileConfiguration fileConfiguration)
+    {
+        String temp = fileConfiguration.getString("Options.currency", "");
+
+        if (temp.equalsIgnoreCase(Constants.S_EXP))
+        {
+            return Constants.S_EXP;
+        }
+        else if (temp.equalsIgnoreCase(Constants.S_PLAYERPOINT))
+        {
+            return Constants.S_PLAYERPOINT;
+        }
+        else if (temp.equalsIgnoreCase(Constants.S_JOBPOINT))
+        {
+            return Constants.S_JOBPOINT;
+        }
+        else
+        {
+            return Constants.S_VAULT;
+        }
+    }
+
+    public void SetShopSellCommand(String shopName, int idx, String command)
+    {
+        CustomConfig shopData = getShopConfig(shopName);
+        if (shopData == null)
+            return;
+
+        ConfigurationSection shopConf = shopData.get().getConfigurationSection("Options");
+        if (shopConf == null)
+            return;
+
+        shopConf.set("command.sell." + idx, command);
+        CleanupCommandIndex(shopName, "sell");
+
+        shopData.save();
+    }
+
+    public void SetShopBuyCommand(String shopName, int idx, String command)
+    {
+        CustomConfig shopData = getShopConfig(shopName);
+        if (shopData == null)
+            return;
+
+        ConfigurationSection shopConf = shopData.get().getConfigurationSection("Options");
+        if (shopConf == null)
+            return;
+
+        shopConf.set("command.buy." + idx, command);
+        CleanupCommandIndex(shopName, "buy");
+
+        shopData.save();
+    }
+
+    public void CleanupCommandIndex(String shopName, String sellBuyString)
+    {
+        CustomConfig shopData = getShopConfig(shopName);
+        if (shopData == null)
+            return;
+
+        ArrayList<Object> tempDatas = new ArrayList<>();
+        if (shopData.get().getConfigurationSection("Options.command." + sellBuyString) != null)
+        {
+            for (Map.Entry<String, Object> s : shopData.get().getConfigurationSection("Options.command." + sellBuyString).getValues(false).entrySet())
+            {
+                tempDatas.add(s.getValue());
+            }
+        }
+        shopData.get().set("Options.command." + sellBuyString, null);
+        for (int i = 0; i < tempDatas.size(); i++)
+        {
+            shopData.get().set("Options.command." + sellBuyString + "." + i, tempDatas.get(i));
         }
     }
 }
