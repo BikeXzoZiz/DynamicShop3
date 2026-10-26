@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.events;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.DynaShopAPI;
@@ -39,23 +40,23 @@ public class OnChat implements Listener
         BukkitTask taskID = Bukkit.getScheduler().runTaskLater(DynamicShop.plugin, () ->
         {
             UUID uuid = player.getUniqueId();
-            String userData = UserUtil.userTempData.get(uuid);
+            String userData = UserService.getInstance().getTempData(uuid);
 
             if (userData.contains("waitforPalette"))
             {
-                UserUtil.userTempData.put(uuid, "");
+                UserService.getInstance().setTempData(uuid, "");
                 player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "MESSAGE.SEARCH_CANCELED"));
             } else if (userData.contains("waitforInput"))
             {
-                UserUtil.userTempData.put(uuid, "");
+                UserService.getInstance().setTempData(uuid, "");
                 player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "MESSAGE.INPUT_CANCELED"));
             } else if (userData.equals("waitforPageDelete") || userData.equals("sellCmd") || userData.equals("buyCmd"))
             {
-                UserUtil.userTempData.put(uuid, "");
+                UserService.getInstance().setTempData(uuid, "");
                 player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "MESSAGE.INPUT_CANCELED"));
             } else if (userData.contains("waitForTradeUI"))
             {
-                UserUtil.userTempData.put(uuid, "");
+                UserService.getInstance().setTempData(uuid, "");
                 player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "MESSAGE.INPUT_CANCELED"));
             }
 
@@ -77,10 +78,10 @@ public class OnChat implements Listener
         Player p = e.getPlayer();
         UUID uuid = p.getUniqueId();
 
-        if(!UserUtil.userTempData.containsKey(uuid))
+        if(!UserService.getInstance().hasTempData(uuid))
             return;
 
-        String userData = UserUtil.userTempData.get(uuid);
+        String userData = UserService.getInstance().getTempData(uuid);
 
         if (userData.contains("waitforPalette"))
         {
@@ -89,8 +90,8 @@ public class OnChat implements Listener
             String s = userData.replace("waitforPalette", "");
             int subType = Integer.parseInt(s);
 
-            String[] userInteractData = UserUtil.userInteractItem.get(p.getUniqueId()).split("/");
-            UserUtil.userTempData.put(uuid, "");
+            String[] userInteractData = UserService.getInstance().getInteractItem(p.getUniqueId()).split("/");
+            UserService.getInstance().setTempData(uuid, "");
             DynaShopAPI.openItemPalette(p, subType, userInteractData[0], Integer.parseInt(userInteractData[1]), 1, e.getMessage());
             cancelRunnable(p);
         } else if (userData.contains("waitforInput"))
@@ -98,7 +99,7 @@ public class OnChat implements Listener
             e.setCancelled(true);
 
             String s = userData.replace("waitforInput", "");
-            String[] temp = UserUtil.userInteractItem.get(uuid).split("/");
+            String[] temp = UserService.getInstance().getInteractItem(uuid).split("/");
 
             switch (s)
             {
@@ -115,14 +116,14 @@ public class OnChat implements Listener
 
             StartPage.ccStartPage.save();
 
-            UserUtil.userTempData.put(uuid, "");
+            UserService.getInstance().setTempData(uuid, "");
             DynaShopAPI.openStartPage(p);
             cancelRunnable(p);
         } else if (userData.contains("waitForTradeUI"))
         {
             e.setCancelled(true);
 
-            String[] temp = UserUtil.userInteractItem.get(uuid).split("/");
+            String[] temp = UserService.getInstance().getInteractItem(uuid).split("/");
             String shopName = temp[0];
             String tradeIdx = temp[1];
 
@@ -143,7 +144,7 @@ public class OnChat implements Listener
                 DynaShopAPI.openItemTradeGui(p, shopName, tradeIdx);
             }
 
-            UserUtil.userTempData.put(uuid, "");
+            UserService.getInstance().setTempData(uuid, "");
             cancelRunnable(p);
         } else if (userData.contains("waitforPageDelete"))
         {
@@ -151,12 +152,12 @@ public class OnChat implements Listener
 
             if (e.getMessage().equals("delete"))
             {
-                String[] temp = UserUtil.userInteractItem.get(uuid).split("/");
+                String[] temp = UserService.getInstance().getInteractItem(uuid).split("/");
                 int targetPage = Integer.parseInt(temp[1]);
                 ShopUtil.deleteShopPage(temp[0], targetPage);
 
                 int openPage = Clamp(targetPage, 1, ShopUtil.GetShopMaxPage(temp[0]));
-                UserUtil.userInteractItem.put(uuid, temp[0] + "/" + openPage);
+                UserService.getInstance().setInteractItem(uuid, temp[0] + "/" + openPage);
 
                 DynaShopAPI.openPageEditor(p, temp[0], openPage);
             } else
@@ -164,15 +165,15 @@ public class OnChat implements Listener
                 p.sendMessage(DynamicShop.dsPrefix(p) + t(p, "MESSAGE.INPUT_CANCELED"));
             }
 
-            UserUtil.userTempData.put(uuid, "");
+            UserService.getInstance().setTempData(uuid, "");
             cancelRunnable(p);
         } else if (userData.equals("sellCmd") || userData.equals("buyCmd"))
         {
             e.setCancelled(true);
 
-            String[] userInteractData = UserUtil.userInteractItem.get(p.getUniqueId()).split("/");
+            String[] userInteractData = UserService.getInstance().getInteractItem(p.getUniqueId()).split("/");
             String shopName = userInteractData[0];
-            UserUtil.userTempData.put(uuid, "");
+            UserService.getInstance().setTempData(uuid, "");
 
             String[] input = e.getMessage().split("/");
             if(input.length == 2)

@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.events;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynaShopAPI;
 import me.sat7.dynamicshop.DynamicShop;
@@ -225,17 +226,17 @@ public class OnSignClick implements Listener
 
                         if (idx != -1)
                         {
-                            UserUtil.userTempData.put(p.getUniqueId(), "sign");
+                            UserService.getInstance().setTempData(p.getUniqueId(), "sign");
 
                             DynaShopAPI.openItemTradeGui(p, shopName, String.valueOf(idx));
                         } else
                         {
-                            UserUtil.userTempData.put(p.getUniqueId(), "sign");
+                            UserService.getInstance().setTempData(p.getUniqueId(), "sign");
                             DynaShopAPI.openShopGui(p, shopName, 1);
                         }
                     } catch (Exception exception)
                     {
-                        UserUtil.userTempData.put(p.getUniqueId(), "sign");
+                        UserService.getInstance().setTempData(p.getUniqueId(), "sign");
                         DynaShopAPI.openShopGui(p, shopName, 1);
                     }
                 }

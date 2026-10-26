@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.commands;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.utilities.UserUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -56,9 +57,9 @@ public final class DeleteUser extends DSCMD
         long currentTime = System.currentTimeMillis();
         long target = day * 86400000L;
 
-        for (String s : UserUtil.ccUser.get().getKeys(false))
+        for (String s : UserService.getInstance().userConfig().get().getKeys(false))
         {
-            long lastJoinLong = UserUtil.ccUser.get().getLong(s + ".lastJoin");
+            long lastJoinLong = UserService.getInstance().userConfig().get().getLong(s + ".lastJoin");
             if (lastJoinLong == 0)
                 continue;
 
@@ -67,13 +68,13 @@ public final class DeleteUser extends DSCMD
             if (dayPassed > target)
             {
                 //sender.sendMessage(DynamicShop.dsPrefix(sender) + Bukkit.getOfflinePlayer(UUID.fromString(s)).getName() + " Deleted");
-                UserUtil.ccUser.get().set(s, null);
+                UserService.getInstance().userConfig().get().set(s, null);
                 count += 1;
             }
         }
 
         if (count > 0)
-            UserUtil.ccUser.save();
+            UserService.getInstance().userConfig().save();
 
         sender.sendMessage(DynamicShop.dsPrefix(sender) + count + " Items Removed");
     }

@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.commands;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.utilities.UserUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -41,14 +42,14 @@ public final class CommandHelp extends DSCMD
         if (args[1].equalsIgnoreCase("on"))
         {
             player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "ON"));
-            UserUtil.userTempData.put(uuid, "");
-            UserUtil.ccUser.get().set(player.getUniqueId() + ".cmdHelp", true);
+            UserService.getInstance().setTempData(uuid, "");
+            UserService.getInstance().userConfig().get().set(player.getUniqueId() + ".cmdHelp", true);
         }
         else if (args[1].equalsIgnoreCase("off"))
         {
             player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "OFF"));
-            UserUtil.userTempData.put(uuid, "");
-            UserUtil.ccUser.get().set(player.getUniqueId() + ".cmdHelp", false);
+            UserService.getInstance().setTempData(uuid, "");
+            UserService.getInstance().userConfig().get().set(player.getUniqueId() + ".cmdHelp", false);
         }
         else
         {

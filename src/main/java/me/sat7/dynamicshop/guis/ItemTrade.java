@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.shop.ShopRegistry;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,7 +70,7 @@ public final class ItemTrade extends InGameUI
         this.material = shopData.getString(tradeIdx + ".mat");
         this.itemMeta = (ItemMeta) shopData.get(tradeIdx + ".itemStack");
 
-        UserUtil.userInteractItem.put(player.getUniqueId(), shopName + "/" + tradeIdx);
+        UserService.getInstance().setInteractItem(player.getUniqueId(), shopName + "/" + tradeIdx);
 
         String uiTitle = shopData.getBoolean("Options.enable", true) ? "" : t(player, "SHOP.DISABLED");
         uiTitle += t(player, "TRADE_TITLE");
@@ -118,9 +119,9 @@ public final class ItemTrade extends InGameUI
             if (e.getSlot() == CLOSE)
             {
                 // 표지판을 클릭해서 거래화면에 진입한 경우에는 상점UI로 돌아가는 대신 인벤토리를 닫음
-                if (UserUtil.userTempData.get(player.getUniqueId()).equalsIgnoreCase("sign"))
+                if (UserService.getInstance().getTempData(player.getUniqueId()).equalsIgnoreCase("sign"))
                 {
-                    UserUtil.userTempData.put(player.getUniqueId(), "");
+                    UserService.getInstance().setTempData(player.getUniqueId(), "");
                     player.closeInventory();
                 } else
                 {
@@ -184,8 +185,8 @@ public final class ItemTrade extends InGameUI
                     player.closeInventory();
                     player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "TRADE.WAIT_FOR_INPUT"));
 
-                    UserUtil.userInteractItem.put(player.getUniqueId(), shopName + "/" + tradeIdx);
-                    UserUtil.userTempData.put(player.getUniqueId(), "waitForTradeUI");
+                    UserService.getInstance().setInteractItem(player.getUniqueId(), shopName + "/" + tradeIdx);
+                    UserService.getInstance().setTempData(player.getUniqueId(), "waitForTradeUI");
 
                     OnChat.WaitForInput(player);
                 }

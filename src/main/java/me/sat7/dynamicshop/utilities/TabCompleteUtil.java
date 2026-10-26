@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.utilities;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.shop.ShopRegistry;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -190,7 +191,7 @@ public final class TabCompleteUtil
                             } else if (args.length == 5)
                             {
                                 String mat = args[3].toUpperCase();
-                                String userTempStr = UserUtil.userTempData.get(uuid);
+                                String userTempStr = UserService.getInstance().getTempData(uuid);
 
                                 if (!(userTempStr.contains("add") && userTempStr.length() > 3))
                                 {

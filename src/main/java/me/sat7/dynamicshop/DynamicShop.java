@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.sat7.dynamicshop.commands.CMDManager;
@@ -109,9 +110,9 @@ public final class DynamicShop extends JavaPlugin implements Listener
 
         console.sendMessage("========== DEBUG LOG ==========");
 
-        console.sendMessage("userTempData: size: " + UserUtil.userTempData.size());
+        console.sendMessage("userTempData: size: " + UserService.getInstance().tempData().size());
         int idx = 0;
-        for(Map.Entry<UUID, String> entry : UserUtil.userTempData.entrySet())
+        for(Map.Entry<UUID, String> entry : UserService.getInstance().tempData().entrySet())
         {
             console.sendMessage(entry.getKey() + ": " + entry.getValue());
             idx++;
@@ -121,9 +122,9 @@ public final class DynamicShop extends JavaPlugin implements Listener
 
         console.sendMessage("---------------------");
 
-        console.sendMessage("userInteractItem: size: " + UserUtil.userInteractItem.size());
+        console.sendMessage("userInteractItem: size: " + UserService.getInstance().interactItem().size());
         idx = 0;
-        for(Map.Entry<UUID, String> entry : UserUtil.userInteractItem.entrySet())
+        for(Map.Entry<UUID, String> entry : UserService.getInstance().interactItem().entrySet())
         {
             console.sendMessage(entry.getKey() + ": " + entry.getValue());
             idx++;
@@ -155,13 +156,13 @@ public final class DynamicShop extends JavaPlugin implements Listener
 
         console.sendMessage("---------------------");
 
-        for (Map.Entry<String, HashMap<String, HashMap<UUID, Integer>>> entry : UserUtil.tradingVolume.entrySet())
+        for (Map.Entry<String, HashMap<String, HashMap<UUID, Integer>>> entry : UserService.getInstance().tradeVolume().entrySet())
         {
             console.sendMessage(entry.getKey());
-            for (Map.Entry<String, HashMap<UUID, Integer>> entry1 : UserUtil.tradingVolume.get(entry.getKey()).entrySet())
+            for (Map.Entry<String, HashMap<UUID, Integer>> entry1 : UserService.getInstance().tradeVolume().get(entry.getKey()).entrySet())
             {
                 console.sendMessage(" - " + entry1.getKey());
-                for (Map.Entry<UUID, Integer> entry2 : UserUtil.tradingVolume.get(entry.getKey()).get(entry1.getKey()).entrySet())
+                for (Map.Entry<UUID, Integer> entry2 : UserService.getInstance().tradeVolume().get(entry.getKey()).get(entry1.getKey()).entrySet())
                 {
                     console.sendMessage(" --- " + entry2.getKey() + " : " + entry2.getValue());
                 }

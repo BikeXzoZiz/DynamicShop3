@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynaShopAPI;
 import me.sat7.dynamicshop.DynamicShop;
@@ -47,7 +48,7 @@ public class ColorPicker extends InGameUI
         {
             if (slotIndex == -1)
             {
-                String shopName = UserUtil.userInteractItem.get(player.getUniqueId()).split("/")[0];
+                String shopName = UserService.getInstance().getInteractItem(player.getUniqueId()).split("/")[0];
                 DynaShopAPI.openShopSettingGui(player, shopName);
             }
             else
@@ -57,7 +58,7 @@ public class ColorPicker extends InGameUI
         }
         else if (slotIndex == -1)
         {
-            String shopName = UserUtil.userInteractItem.get(player.getUniqueId()).split("/")[0];
+            String shopName = UserService.getInstance().getInteractItem(player.getUniqueId()).split("/")[0];
             CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
 
             String color = null;

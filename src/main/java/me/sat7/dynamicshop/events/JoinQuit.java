@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.events;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.UpdateChecker;
 
@@ -58,7 +59,6 @@ public class JoinQuit implements Listener
     public void OnPlayerQuit(PlayerQuitEvent e)
     {
         UIManager.OnPlayerQuit(e.getPlayer());
-        UserUtil.userTempData.remove(e.getPlayer().getUniqueId());
-        UserUtil.userInteractItem.remove(e.getPlayer().getUniqueId());
+        UserService.getInstance().clearSession(e.getPlayer().getUniqueId());
     }
 }

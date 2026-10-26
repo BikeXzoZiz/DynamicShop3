@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.events;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.DynaShopAPI;
 import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.guis.InGameUI;
@@ -38,7 +39,7 @@ public class OnClick implements Listener
             // UUID 확인되지 않는 경우 플러그인 사용을 막음. (이게 실질적으로 의미가 있는지는 모르겠음)
             String pUuid = player.getUniqueId().toString();
 
-            if (UserUtil.ccUser.get().getConfigurationSection(pUuid) == null)
+            if (UserService.getInstance().userConfig().get().getConfigurationSection(pUuid) == null)
             {
                 if (!DynaShopAPI.recreateUserData(player))
                 {

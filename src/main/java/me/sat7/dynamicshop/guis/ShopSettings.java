@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.shop.ShopRegistry;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -823,7 +824,7 @@ public final class ShopSettings extends InGameUI
                 player.closeInventory();
                 player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "MESSAGE.ENTER_COMMAND_2"));
 
-                UserUtil.userTempData.put(player.getUniqueId(), "sellCmd");
+                UserService.getInstance().setTempData(player.getUniqueId(), "sellCmd");
                 Command.PrintCurrentState(player, shopName, true, false);
                 OnChat.WaitForInput(player);
             }
@@ -845,7 +846,7 @@ public final class ShopSettings extends InGameUI
                 player.closeInventory();
                 player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "MESSAGE.ENTER_COMMAND_2"));
 
-                UserUtil.userTempData.put(player.getUniqueId(), "buyCmd");
+                UserService.getInstance().setTempData(player.getUniqueId(), "buyCmd");
                 Command.PrintCurrentState(player, shopName, false, true);
                 OnChat.WaitForInput(player);
             }
@@ -923,8 +924,8 @@ public final class ShopSettings extends InGameUI
                 player.closeInventory();
                 player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "TRADE.WAIT_FOR_INPUT"));
 
-                UserUtil.userInteractItem.put(player.getUniqueId(), shopName + "/-1");
-                UserUtil.userTempData.put(player.getUniqueId(), "waitForTradeUI");
+                UserService.getInstance().setInteractItem(player.getUniqueId(), shopName + "/-1");
+                UserService.getInstance().setTempData(player.getUniqueId(), "waitForTradeUI");
 
                 OnChat.WaitForInput(player);
             }

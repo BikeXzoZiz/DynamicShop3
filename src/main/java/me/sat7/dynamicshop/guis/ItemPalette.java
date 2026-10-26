@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.user.UserService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -451,7 +452,7 @@ public final class ItemPalette extends InGameUI
         {
             player.closeInventory();
 
-            UserUtil.userTempData.put(player.getUniqueId(), "waitforPalette" + uiSubType);
+            UserService.getInstance().setTempData(player.getUniqueId(), "waitforPalette" + uiSubType);
             OnChat.WaitForInput(player);
 
             player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "MESSAGE.SEARCH_ITEM"));

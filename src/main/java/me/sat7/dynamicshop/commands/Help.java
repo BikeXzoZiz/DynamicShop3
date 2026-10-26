@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.commands;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.commands.shop.Command;
 import me.sat7.dynamicshop.utilities.UserUtil;
 import org.bukkit.Material;
@@ -25,14 +26,14 @@ public final class Help
     // 명령어 도움말 표시
     public static void showHelp(String helpcode, Player player, String[] args)
     {
-        if (!UserUtil.ccUser.get().getBoolean(player.getUniqueId() + ".cmdHelp"))
+        if (!UserService.getInstance().userConfig().get().getBoolean(player.getUniqueId() + ".cmdHelp"))
             return;
 
         UUID uuid = player.getUniqueId();
-        if (UserUtil.userTempData.get(uuid).equals(helpcode))
+        if (UserService.getInstance().getTempData(uuid).equals(helpcode))
             return;
 
-        UserUtil.userTempData.put(uuid, helpcode);
+        UserService.getInstance().setTempData(uuid, helpcode);
 
         if (helpcode.equals("main"))
         {

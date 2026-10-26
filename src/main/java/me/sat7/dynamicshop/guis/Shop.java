@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.user.UserService;
 import me.sat7.dynamicshop.shop.ShopRegistry;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,7 +75,7 @@ public final class Shop extends InGameUI
         maxPage = GetShopMaxPage(shopName);
         this.page = Clamp(page,1,maxPage);
 
-        UserUtil.userInteractItem.put(player.getUniqueId(), shopName + "/" + this.page);
+        UserService.getInstance().setInteractItem(player.getUniqueId(), shopName + "/" + this.page);
 
         String uiName = shopData.getBoolean("Options.enable", true) ? "" : t(player, "SHOP.DISABLED");
         uiName += "§3" + shopData.getString("Options.title", shopName);
@@ -529,9 +530,9 @@ public final class Shop extends InGameUI
     private void CloseUI()
     {
         // 표지판으로 접근한 경우에는 그냥 창을 닫음
-        if (UserUtil.userTempData.get(player.getUniqueId()).equalsIgnoreCase("sign"))
+        if (UserService.getInstance().getTempData(player.getUniqueId()).equalsIgnoreCase("sign"))
         {
-            UserUtil.userTempData.put(player.getUniqueId(), "");
+            UserService.getInstance().setTempData(player.getUniqueId(), "");
             player.closeInventory();
         }
         else
