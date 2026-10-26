@@ -23,7 +23,12 @@ import static me.sat7.dynamicshop.utilities.MathUtil.TickToMilliSeconds;
 public final class RotationUtil
 {
     public static final String rotationFolderName = "Rotation";
-    public static final String rotationDataPath = DynamicShop.plugin.getDataFolder() + "/" + rotationFolderName;
+
+    // 데이터 폴더의 Rotation 폴더 경로. (클래스 로드 시점엔 plugin 이 아직 없을 수 있어 조회를 미룸)
+    public static String rotationDataPath()
+    {
+        return DynamicShop.plugin.getDataFolder() + "/" + rotationFolderName;
+    }
 
     // ===== [ Private ] =====
 
@@ -199,14 +204,14 @@ public final class RotationUtil
     {
         rotationDataMap.remove(shopName);
 
-        File rotationFolder = new File(rotationDataPath);
+        File rotationFolder = new File(rotationDataPath());
         rotationFolder.mkdir();
-        File subFolder = new File(rotationDataPath, shopName);
+        File subFolder = new File(rotationDataPath(), shopName);
         subFolder.mkdir();
 
         CustomConfig[] rotationDataList = new CustomConfig[7];
 
-        String path = rotationDataPath + "/" + shopName;
+        String path = rotationDataPath() + "/" + shopName;
         File[] listOfFiles = new File(path).listFiles();
 
         if (listOfFiles == null)
@@ -616,14 +621,14 @@ public final class RotationUtil
         sharedDataMap.remove(oldName);
         rotationDataMap.remove(oldName);
 
-        String oldPath = rotationDataPath + "/" + oldName;
+        String oldPath = rotationDataPath() + "/" + oldName;
         File subFolder = new File(oldPath);
         if (subFolder.exists())
         {
             File[] listOfFiles = new File(oldPath).listFiles();
             if (listOfFiles != null)
             {
-                File newFolder = new File(rotationDataPath, newName);
+                File newFolder = new File(rotationDataPath(), newName);
                 newFolder.mkdir();
 
                 boolean err = false;
@@ -659,14 +664,14 @@ public final class RotationUtil
 
     public static void OnShopCopy(String oldName, String newName)
     {
-        String oldPath = rotationDataPath + "/" + oldName;
+        String oldPath = rotationDataPath() + "/" + oldName;
         File subFolder = new File(oldPath);
         if (subFolder.exists())
         {
             File[] listOfFiles = new File(oldPath).listFiles();
             if (listOfFiles != null)
             {
-                File newFolder = new File(rotationDataPath, newName);
+                File newFolder = new File(rotationDataPath(), newName);
                 newFolder.mkdir();
 
                 for (File f : listOfFiles)
@@ -694,7 +699,7 @@ public final class RotationUtil
         sharedDataMap.remove(shopName);
         rotationDataMap.remove(shopName);
 
-        String path = rotationDataPath + "/" + shopName;
+        String path = rotationDataPath() + "/" + shopName;
 
         try
         {
