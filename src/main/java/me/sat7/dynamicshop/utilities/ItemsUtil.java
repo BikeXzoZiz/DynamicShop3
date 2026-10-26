@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.utilities;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import java.util.ArrayList;
 
 import me.sat7.dynamicshop.files.CustomConfig;
@@ -62,7 +63,7 @@ public final class ItemsUtil
 
     public static void sendItemInfo(Player player, String shopName, int idx, String msgType)
     {
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
 
         String info = " value:" + data.get().getDouble(idx + ".value");
 

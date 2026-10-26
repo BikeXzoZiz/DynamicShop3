@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.utilities;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.constants.Constants;
 import me.sat7.dynamicshop.files.CustomConfig;
@@ -32,7 +33,7 @@ public final class RotationUtil
     // 현재 상점 yml 데이터 기반으로 로테이션 yml 파일을 생성함
     private static CustomConfig CreateRotationDataFromCurrentShop(String shopName, int rotationIndex)
     {
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
         if (shopData == null)
             return null;
 
@@ -88,7 +89,7 @@ public final class RotationUtil
     // 아이템 없이 빈 로테이션 yml 파일을 생성함
     private static CustomConfig CreateEmptyRotationData(String shopName, int rotationIndex)
     {
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
         if (shopData == null)
             return null;
 
@@ -281,10 +282,10 @@ public final class RotationUtil
     // 현재 로테이션 인덱스 반환
     public static int GetCurrentRotationIndex(String shopName)
     {
-        if (!ShopUtil.shopConfigFiles.containsKey(shopName))
+        if (!ShopRegistry.getInstance().hasShop(shopName))
             return -1;
 
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
         if (shopData == null)
             return -1;
 
@@ -298,7 +299,7 @@ public final class RotationUtil
         if (currentRotationIndex == -1)
             return;
 
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
         if (shopData == null)
             return;
 
@@ -340,7 +341,7 @@ public final class RotationUtil
         if (sharedData == null)
             return;
 
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
         if (shopData == null)
             return;
 
@@ -370,7 +371,7 @@ public final class RotationUtil
     // 다음 로테이션 적용
     public static void ApplyNextRotation(String shopName, long period)
     {
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
         if (shopData == null)
         {
             StopRotationTask(shopName);
@@ -434,7 +435,7 @@ public final class RotationUtil
     // 로테이션 적용
     public static void ApplyRotation(String shopName, int oldIdx, int rotationIdx)
     {
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
         CustomConfig[] rotationDatas = rotationDataMap.get(shopName);
         if (shopData == null || rotationDatas == null || rotationIdx == -1 || rotationDatas[rotationIdx] == null)
             return;
@@ -517,7 +518,7 @@ public final class RotationUtil
 
     public static void DisableRotation(String shopName)
     {
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
         if (shopData != null)
         {
             shopData.get().set("Options.Rotation", null);
@@ -572,7 +573,7 @@ public final class RotationUtil
 
         RotationTaskMap.clear();
 
-        for (String shopName : ShopUtil.shopConfigFiles.keySet())
+        for (String shopName : ShopRegistry.getInstance().shopNames())
         {
             RestartRotationTask(shopName);
         }
@@ -580,7 +581,7 @@ public final class RotationUtil
 
     public static void RestartRotationTask(String shopName)
     {
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
         if (shopData == null)
             return;
 

@@ -3,6 +3,7 @@ package me.sat7.dynamicshop.shop;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -30,10 +31,6 @@ import static me.sat7.dynamicshop.utilities.LangUtil.t;
  * periodic/forced saves and YML backups. All shop registration changes
  * (create / rename / copy / merge / delete) and shop-level data access
  * (balance, currency, per-slot commands) go through this class.</p>
- *
- * <p>{@code ShopUtil.shopConfigFiles} and {@code ShopUtil.shopDirty} are
- * legacy aliases to the same live maps, kept while callers are migrated
- * slice by slice. New code should use the registry, not the aliases.</p>
  *
  * <p>{@code getInstance()} is a migration scaffold toward constructor
  * injection; the composition root will construct and pass this class
@@ -85,6 +82,24 @@ public final class ShopRegistry
     public Set<Map.Entry<String, CustomConfig>> entries()
     {
         return shopConfigFiles.entrySet();
+    }
+
+    // 등록된 모든 상점 이름.
+    public Set<String> shopNames()
+    {
+        return shopConfigFiles.keySet();
+    }
+
+    // 등록된 모든 상점 config.
+    public Collection<CustomConfig> shops()
+    {
+        return shopConfigFiles.values();
+    }
+
+    // 등록된 상점 개수.
+    public int count()
+    {
+        return shopConfigFiles.size();
     }
 
     // ---------- registration ----------

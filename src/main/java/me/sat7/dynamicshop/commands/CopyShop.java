@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.commands;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -33,7 +34,7 @@ public final class CopyShop extends DSCMD
         if(!CheckValid(args, sender))
             return;
 
-        if (ShopUtil.shopConfigFiles.containsKey(args[1]))
+        if (ShopRegistry.getInstance().hasShop(args[1]))
         {
             if (args[1].equals(args[2]))
             {

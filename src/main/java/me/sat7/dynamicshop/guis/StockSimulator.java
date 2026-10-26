@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynaShopAPI;
 import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.files.CustomConfig;
@@ -87,7 +88,7 @@ public class StockSimulator extends InGameUI
             inventory.setItem((i * 9) + 1, itemStack);
         }
 
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
         fluc = data.get().contains("Options.fluctuation");
         if (fluc)
         {
@@ -221,7 +222,7 @@ public class StockSimulator extends InGameUI
 
     private void CreateSampleDatas(int startIdx)
     {
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
         tempDatas.clear();
 
         int skipIdx = 0;
@@ -505,7 +506,7 @@ public class StockSimulator extends InGameUI
 
     private void ApplySettings()
     {
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
         if (fluc)
         {
             data.get().set("Options.fluctuation.interval", flucInterval);

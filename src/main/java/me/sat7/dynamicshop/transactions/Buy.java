@@ -33,7 +33,7 @@ public final class Buy
     public static void buy(String currency, Player player, String shopName, String tradeIdx, ItemStack itemStack, double priceSum, boolean infiniteStock)
     {
         Economy econ = null;
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
 
         int tradeAmount = 0;
         int stockOld = data.get().getInt(tradeIdx + ".stock");

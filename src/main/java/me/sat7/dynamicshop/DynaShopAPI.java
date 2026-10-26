@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import lombok.NonNull;
 import me.sat7.dynamicshop.constants.Constants;
 import me.sat7.dynamicshop.files.CustomConfig;
@@ -29,10 +30,10 @@ public final class DynaShopAPI
 
     public static boolean IsShopEnable(String shopName)
     {
-        if(!ShopUtil.shopConfigFiles.containsKey(shopName))
+        if(!ShopRegistry.getInstance().hasShop(shopName))
             return false;
 
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
         return shopData.get().getBoolean("Options.enable", true);
     }
 
@@ -216,7 +217,7 @@ public final class DynaShopAPI
      */
     public static ArrayList<String> getShops()
     {
-        return new ArrayList<>(ShopUtil.shopConfigFiles.keySet());
+        return new ArrayList<>(ShopRegistry.getInstance().shopNames());
     }
 
     /**
@@ -230,7 +231,7 @@ public final class DynaShopAPI
     {
         if (validateShopName(shopName))
         {
-            CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+            CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
             
             ArrayList<ItemStack> list = new ArrayList<>();
             for (String s : data.get().getKeys(false))
@@ -328,7 +329,7 @@ public final class DynaShopAPI
     {
         if (validateShopName(shopName))
         {
-            CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+            CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
 
             int idx = ShopUtil.findItemFromShop(shopName, itemStack);
             if (idx != -1)
@@ -356,7 +357,7 @@ public final class DynaShopAPI
     {
         if (validateShopName(shopName))
         {
-            CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+            CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
 
             int idx = ShopUtil.findItemFromShop(shopName, itemStack);
             if (idx != -1)
@@ -460,7 +461,7 @@ public final class DynaShopAPI
     {
         if (validateShopName(shopName))
         {
-            CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+            CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
             return ShopUtil.GetCurrency(data).equalsIgnoreCase(Constants.S_JOBPOINT);
         } else
         {
@@ -479,7 +480,7 @@ public final class DynaShopAPI
     {
         if (validateShopName(shopName))
         {
-            CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+            CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
             return ShopUtil.GetCurrency(data).equalsIgnoreCase(Constants.S_PLAYERPOINT);
         } else
         {
@@ -491,7 +492,7 @@ public final class DynaShopAPI
     {
         if (validateShopName(shopName))
         {
-            CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+            CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
             return ShopUtil.GetCurrency(data);
         } else
         {

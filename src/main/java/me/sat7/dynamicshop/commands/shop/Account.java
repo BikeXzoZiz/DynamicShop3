@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.commands.shop;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.commands.DSCMD;
 import me.sat7.dynamicshop.commands.Shop;
@@ -47,9 +48,9 @@ public class Account extends DSCMD
             return;
 
         String shopName = Shop.GetShopName(args);
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
 
-        CustomConfig targetShopData = ShopUtil.shopConfigFiles.get(args[4]);
+        CustomConfig targetShopData = ShopRegistry.getInstance().getShopConfig(args[4]);
         switch (args[3])
         {
             case "set":
@@ -73,7 +74,7 @@ public class Account extends DSCMD
                 break;
             case "linkto":
                 // 그런 상점(타깃) 없음
-                if (!ShopUtil.shopConfigFiles.containsKey(args[4]))
+                if (!ShopRegistry.getInstance().hasShop(args[4]))
                 {
                     sender.sendMessage(DynamicShop.dsPrefix(sender) + t(sender, "ERR.SHOP_NOT_FOUND"));
                     return;
@@ -94,7 +95,7 @@ public class Account extends DSCMD
                 }
 
                 // 출발상점을 타깃으로 하는 상점이 있음
-                for (CustomConfig tempShopData : ShopUtil.shopConfigFiles.values())
+                for (CustomConfig tempShopData : ShopRegistry.getInstance().shops())
                 {
                     String temp = tempShopData.get().getString("Options.Balance");
                     try
@@ -181,7 +182,7 @@ public class Account extends DSCMD
                 }
 
                 // 다른 상점으로 송금
-                if (ShopUtil.shopConfigFiles.containsKey(args[4]))
+                if (ShopRegistry.getInstance().hasShop(args[4]))
                 {
                     // 도착 상점이 무한계좌임
                     if (!targetShopData.get().contains("Options.Balance"))

@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.events;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynaShopAPI;
 import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.constants.Constants;
@@ -53,7 +54,7 @@ public class OnSignClick implements Listener
                 return;
             }
 
-            if (!ShopUtil.shopConfigFiles.containsKey(e.getLine(1))) {
+            if (!ShopRegistry.getInstance().hasShop(e.getLine(1))) {
                 e.getBlock().breakNaturally();
                 e.getPlayer().sendMessage(DynamicShop.dsPrefix(e.getPlayer()) + t(e.getPlayer(), "ERR.SHOP_NOT_EXIST"));
                 return;
@@ -135,7 +136,7 @@ public class OnSignClick implements Listener
                 // 정보가 없음
                 if (!DynamicShop.ccSign.get().contains(signId) &&
                         s.getLine(1).length() > 0 &&
-                        ShopUtil.shopConfigFiles.containsKey(ChatColor.stripColor(s.getLine(1))))
+                        ShopRegistry.getInstance().hasShop(ChatColor.stripColor(s.getLine(1))))
                 {
                     // 재생성 시도
                     if (e.getPlayer().hasPermission(P_ADMIN_CREATE_SIGN))
@@ -189,7 +190,7 @@ public class OnSignClick implements Listener
                 if (shopName == null || shopName.length() == 0) return;
 
                 // 상점 존재 확인
-                if (ShopUtil.shopConfigFiles.containsKey(shopName))
+                if (ShopRegistry.getInstance().hasShop(shopName))
                 {
                     if (p.getGameMode() == GameMode.CREATIVE && !p.hasPermission(Constants.P_ADMIN_CREATIVE))
                     {
@@ -208,7 +209,7 @@ public class OnSignClick implements Listener
 
 
                     //권한 확인
-                    String permission = ShopUtil.shopConfigFiles.get(shopName).get().getString("Options.permission");
+                    String permission = ShopRegistry.getInstance().getShopConfig(shopName).get().getString("Options.permission");
                     if (permission != null && permission.length() > 0)
                     {
                         if (!p.hasPermission(permission) && !p.hasPermission(permission + ".buy") && !p.hasPermission(permission + ".sell"))

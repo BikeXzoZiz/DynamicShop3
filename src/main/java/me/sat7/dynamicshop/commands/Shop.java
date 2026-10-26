@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.commands;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.files.CustomConfig;
 import me.sat7.dynamicshop.utilities.ConfigUtil;
 import org.bukkit.command.CommandSender;
@@ -54,13 +55,13 @@ public final class Shop
         String shopName = GetShopName(args);
 
         // 그런 이름을 가진 상점이 있는지 확인
-        if (player != null && !ShopUtil.shopConfigFiles.containsKey(shopName))
+        if (player != null && !ShopRegistry.getInstance().hasShop(shopName))
         {
             player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "ERR.SHOP_NOT_FOUND"));
             return;
         }
 
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
 
         // 상점 UI 열기
         if (player != null && args.length <= 2)

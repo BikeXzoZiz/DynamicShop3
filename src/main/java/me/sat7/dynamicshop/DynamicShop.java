@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.sat7.dynamicshop.commands.CMDManager;
 import me.sat7.dynamicshop.commands.Optional;
@@ -132,14 +133,14 @@ public final class DynamicShop extends JavaPlugin implements Listener
 
         console.sendMessage("---------------------");
 
-        console.sendMessage("ShopUtil.shopConfigFiles: size: " + ShopUtil.shopConfigFiles.size());
-        for(Map.Entry<String, CustomConfig> entry : ShopUtil.shopConfigFiles.entrySet())
+        console.sendMessage("ShopUtil.shopConfigFiles: size: " + ShopRegistry.getInstance().count());
+        for(Map.Entry<String, CustomConfig> entry : ShopRegistry.getInstance().entries())
             console.sendMessage(entry.getKey() + ": " + entry.getValue());
 
         console.sendMessage("---------------------");
 
-        console.sendMessage("ShopUtil.ShopUtil.shopDirty: size: " + ShopUtil.shopDirty.size());
-        for(Map.Entry<String, Boolean> entry : ShopUtil.shopDirty.entrySet())
+        console.sendMessage("ShopUtil.ShopUtil.shopDirty: size: " + ShopRegistry.getInstance().dirtyFlags().size());
+        for(Map.Entry<String, Boolean> entry : ShopRegistry.getInstance().dirtyFlags().entrySet())
             console.sendMessage(entry.getKey() + ": " + entry.getValue());
 
         console.sendMessage("---------------------");

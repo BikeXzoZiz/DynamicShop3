@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.commands;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.guis.StartPage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -35,7 +36,7 @@ public final class RenameShop extends DSCMD
         if (!CheckValid(args, sender))
             return;
 
-        if (ShopUtil.shopConfigFiles.containsKey(args[1]))
+        if (ShopRegistry.getInstance().hasShop(args[1]))
         {
             if (args[1].equals(args[2]))
             {

@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynaShopAPI;
 import me.sat7.dynamicshop.files.CustomConfig;
 import me.sat7.dynamicshop.utilities.MathUtil;
@@ -50,7 +51,7 @@ public class RotationEditor extends InGameUI
     {
         this.player = player;
         this.shopName = shopName;
-        this.shopData = ShopUtil.shopConfigFiles.get(shopName);
+        this.shopData = ShopRegistry.getInstance().getShopConfig(shopName);
         this.currentRotation = RotationUtil.GetCurrentRotationIndex(shopName);
         this.period = MathUtil.TickToMilliSeconds(shopData.get().getLong("Options.Rotation.Period", dayInTick));
         this.period_new = period;

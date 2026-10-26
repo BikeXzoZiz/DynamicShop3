@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.events;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.DynaShopAPI;
 import me.sat7.dynamicshop.files.CustomConfig;
@@ -125,7 +126,7 @@ public class OnChat implements Listener
             String shopName = temp[0];
             String tradeIdx = temp[1];
 
-            CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+            CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
 
             if (tradeIdx.equals("-1"))
             {

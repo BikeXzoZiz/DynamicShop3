@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.transactions;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.files.CustomConfig;
 import me.sat7.dynamicshop.utilities.ConfigUtil;
 import me.sat7.dynamicshop.utilities.ShopUtil;
@@ -157,7 +158,7 @@ public final class Calc
     /** Shop-level sales tax rate in percent, falling back to the global config value. */
     public static int getTaxRate(String shopName)
     {
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
         if (data == null || data.get() == null)
         {
             throw new IllegalArgumentException("Unknown shop: " + shopName);
@@ -210,7 +211,7 @@ public final class Calc
 
     private static FileConfiguration shopData(String shopName)
     {
-        CustomConfig config = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig config = ShopRegistry.getInstance().getShopConfig(shopName);
         if (config == null || config.get() == null)
         {
             throw new IllegalArgumentException("Unknown shop: " + shopName);

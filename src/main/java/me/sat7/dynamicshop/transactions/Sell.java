@@ -37,7 +37,7 @@ public final class Sell
 
     public static double quickSellItem(Player player, ItemStack itemStack, String shopName, int tradeIdx, boolean isShiftClick, int slot, boolean playSound)
     {
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
         String currencyType = ShopUtil.GetCurrency(data);
 
         double priceSellOld = DynaShopAPI.getSellPrice(shopName, itemStack);
@@ -209,7 +209,7 @@ public final class Sell
 
     public static void sell(String currency, Player player, String shopName, String tradeIdx, ItemStack itemStack, double priceSum, boolean infiniteStock)
     {
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
 
         double priceSellOld = DynaShopAPI.getSellPrice(shopName, itemStack);
         double priceBuyOld = Calc.getCurrentPrice(shopName, String.valueOf(tradeIdx), true);

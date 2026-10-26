@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynaShopAPI;
 import me.sat7.dynamicshop.utilities.MathUtil;
 import me.sat7.dynamicshop.utilities.ShopUtil;
@@ -32,7 +33,7 @@ public class ShopList extends InGameUI
     {
         inventory = Bukkit.createInventory(player, 54, t(player, "START_PAGE.SHOP_LIST_TITLE"));
 
-        this.maxPage = ShopUtil.shopConfigFiles.size() / 45 + 1;
+        this.maxPage = ShopRegistry.getInstance().count() / 45 + 1;
         this.page = MathUtil.Clamp(page, 1, maxPage);
         this.slotIndex = slotIndex;
 
@@ -86,7 +87,7 @@ public class ShopList extends InGameUI
     {
         int idx = 0;
         int slotIdx = 0;
-        for (String shopName : ShopUtil.shopConfigFiles.keySet())
+        for (String shopName : ShopRegistry.getInstance().shopNames())
         {
             if (idx > page * 45)
                 break;

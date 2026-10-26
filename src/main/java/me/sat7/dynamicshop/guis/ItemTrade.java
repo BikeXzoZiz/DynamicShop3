@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -63,7 +64,7 @@ public final class ItemTrade extends InGameUI
         this.shopName = shopName;
         this.tradeIdx = tradeIdx;
         this.deliveryCharge = ShopUtil.CalcShipping(shopName, player);
-        this.shopData = ShopUtil.shopConfigFiles.get(shopName).get();
+        this.shopData = ShopRegistry.getInstance().getShopConfig(shopName).get();
         this.sellBuyOnly = shopData.getString(this.tradeIdx + ".tradeType", "");
         this.material = shopData.getString(tradeIdx + ".mat");
         this.itemMeta = (ItemMeta) shopData.get(tradeIdx + ".itemStack");
@@ -110,7 +111,7 @@ public final class ItemTrade extends InGameUI
         if(!CheckShopIsEnable())
             return;
 
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
 
         if (e.getCurrentItem() != null && e.getCurrentItem().getItemMeta() != null)
         {
@@ -543,7 +544,7 @@ public final class ItemTrade extends InGameUI
 
     public boolean CheckShopIsEnable()
     {
-        if (!ShopUtil.shopConfigFiles.containsKey(shopName)
+        if (!ShopRegistry.getInstance().hasShop(shopName)
             || shopData == null
             || !shopData.contains(tradeIdx)
             || !shopData.getString(tradeIdx + ".mat").equals(material))

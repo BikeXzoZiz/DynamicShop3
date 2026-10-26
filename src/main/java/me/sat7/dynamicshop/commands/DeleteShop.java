@@ -37,9 +37,9 @@ public final class DeleteShop extends DSCMD
         if(!CheckValid(args, sender))
             return;
 
-        if (ShopUtil.shopConfigFiles.containsKey(args[1]))
+        if (ShopRegistry.getInstance().hasShop(args[1]))
         {
-            CustomConfig data = ShopUtil.shopConfigFiles.get(args[1]);
+            CustomConfig data = ShopRegistry.getInstance().getShopConfig(args[1]);
             data.delete();
 
             ShopRegistry.getInstance().unregister(args[1]);

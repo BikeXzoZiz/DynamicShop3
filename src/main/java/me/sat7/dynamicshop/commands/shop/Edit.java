@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.commands.shop;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.commands.DSCMD;
 import me.sat7.dynamicshop.commands.Shop;
@@ -45,7 +46,7 @@ public class Edit extends DSCMD
             return;
 
         String shopName = Shop.GetShopName(args);
-        CustomConfig shopData = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig shopData = ShopRegistry.getInstance().getShopConfig(shopName);
 
         int idx;
         double buyValue;

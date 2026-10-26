@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.commands;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.utilities.ConfigUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,7 +35,7 @@ public final class SetDefaultShop extends DSCMD
         if(!CheckValid(args, sender))
             return;
 
-        if (ShopUtil.shopConfigFiles.containsKey(args[1]))
+        if (ShopRegistry.getInstance().hasShop(args[1]))
         {
             ConfigUtil.SetDefaultShopName(args[1]);
             ConfigUtil.Save();

@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynaShopAPI;
 import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.files.CustomConfig;
@@ -57,7 +58,7 @@ public class ColorPicker extends InGameUI
         else if (slotIndex == -1)
         {
             String shopName = UserUtil.userInteractItem.get(player.getUniqueId()).split("/")[0];
-            CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+            CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
 
             String color = null;
             if (e.getCurrentItem() != null && !e.getCurrentItem().getType().isAir())

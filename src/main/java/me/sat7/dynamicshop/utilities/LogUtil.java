@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.utilities;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -34,7 +35,7 @@ public final class LogUtil
     {
         if (ConfigUtil.GetSaveLogs())
         {
-            CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+            CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
 
             if (data.get().contains("Options.log") && data.get().getBoolean("Options.log")) // 옛날엔 이렇게 저장했음.
             {

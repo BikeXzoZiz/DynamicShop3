@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.utilities;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import lombok.Getter;
 import lombok.Setter;
 import me.sat7.dynamicshop.DynamicShop;
@@ -451,7 +452,7 @@ public final class ConfigUtil
         int userVersion = ConfigUtil.GetConfigVersion();
         if (userVersion == 3)
         {
-            for(Map.Entry<String, CustomConfig> entry : ShopUtil.shopConfigFiles.entrySet())
+            for(Map.Entry<String, CustomConfig> entry : ShopRegistry.getInstance().entries())
             {
                 ConfigurationSection cmdCS = entry.getValue().get().getConfigurationSection("Options.command");
                 if(cmdCS == null)

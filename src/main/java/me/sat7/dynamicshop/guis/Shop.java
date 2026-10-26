@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -52,7 +53,7 @@ public final class Shop extends InGameUI
 
     public Inventory getGui(Player player, String shopName, int page)
     {
-        shopData = ShopUtil.shopConfigFiles.get(shopName).get();
+        shopData = ShopRegistry.getInstance().getShopConfig(shopName).get();
 
         if (!JobsHook.jobsRebornActive && ShopUtil.GetCurrency(shopData).equalsIgnoreCase(Constants.S_JOBPOINT))
         {
@@ -669,7 +670,7 @@ public final class Shop extends InGameUI
                 RotationUtil.UpdateCurrentRotationData(shopName, selectedSlot);
                 RotationUtil.UpdateCurrentRotationData(shopName, idx);
 
-                ShopUtil.shopConfigFiles.get(shopName).save();
+                ShopRegistry.getInstance().getShopConfig(shopName).save();
                 selectedSlot = -1;
                 RefreshUI();
             }
@@ -707,7 +708,7 @@ public final class Shop extends InGameUI
 
     public boolean CheckShopIsEnable()
     {
-        if (!ShopUtil.shopConfigFiles.containsKey(shopName))
+        if (!ShopRegistry.getInstance().hasShop(shopName))
         {
             player.sendMessage(DynamicShop.dsPrefix(player) + t(player, "ERR.INVALID_TRANSACTION"));
             player.closeInventory();

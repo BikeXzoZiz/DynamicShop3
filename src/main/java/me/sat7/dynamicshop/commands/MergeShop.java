@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.commands;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,7 +40,7 @@ public final class MergeShop extends DSCMD
             return;
         }
 
-        if (ShopUtil.shopConfigFiles.containsKey(args[1]) && ShopUtil.shopConfigFiles.containsKey(args[2]))
+        if (ShopRegistry.getInstance().hasShop(args[1]) && ShopRegistry.getInstance().hasShop(args[2]))
         {
             ShopUtil.mergeShop(args[1], args[2]);
             sender.sendMessage(DynamicShop.dsPrefix(sender) + t(sender, "MESSAGE.CHANGES_APPLIED") + args[1]);

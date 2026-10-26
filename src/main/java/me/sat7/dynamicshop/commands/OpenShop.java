@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.commands;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynaShopAPI;
 import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.utilities.ShopUtil;
@@ -39,7 +40,7 @@ public class OpenShop extends DSCMD
             player = (Player) sender;
 
         String shopName;
-        if (ShopUtil.shopConfigFiles.containsKey(args[1]))
+        if (ShopRegistry.getInstance().hasShop(args[1]))
         {
             shopName = args[1];
         } else

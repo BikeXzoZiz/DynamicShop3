@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -89,7 +90,7 @@ public final class ShopSettings extends InGameUI
 
         inventory = Bukkit.createInventory(player, 54, t(player, "SHOP_SETTING_TITLE") + "§7 | §8" + shopName);
 
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
         ConfigurationSection confSec_Options = data.get().getConfigurationSection("Options");
 
         // 닫기 버튼
@@ -381,7 +382,7 @@ public final class ShopSettings extends InGameUI
     {
         Player player = (Player) e.getWhoClicked();
 
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
 
         // 닫기버튼
         if (e.getSlot() == CLOSE)

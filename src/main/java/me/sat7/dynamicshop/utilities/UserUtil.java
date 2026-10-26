@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.utilities;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.files.CustomConfig;
 import org.bukkit.configuration.ConfigurationSection;
@@ -149,7 +150,7 @@ public final class UserUtil
 
         for (Map.Entry<String, HashMap<String, HashMap<UUID, Integer>>> shopMap : tradingVolume.entrySet())
         {
-            CustomConfig data = ShopUtil.shopConfigFiles.get(shopMap.getKey());
+            CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopMap.getKey());
             if (data == null)
                 continue;
 
@@ -264,7 +265,7 @@ public final class UserUtil
     }
     public static void ClearTradeLimitData(String shopName, int idx)
     {
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
         if (data == null)
             return;
 

@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.guis;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -181,7 +182,7 @@ public final class ItemSettings extends InGameUI
             } else
             {
                 String taxStr = "§7" + ChatColor.stripColor(t(null, "TAX.SALES_TAX")) + ": ";
-                FileConfiguration config = ShopUtil.shopConfigFiles.get(shopName).get();
+                FileConfiguration config = ShopRegistry.getInstance().getShopConfig(shopName).get();
                 if (config.contains("Options.SalesTax"))
                 {
                     taxStr += config.getInt("Options.SalesTax") + "%";

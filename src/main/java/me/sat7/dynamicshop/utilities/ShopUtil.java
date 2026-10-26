@@ -24,17 +24,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public final class ShopUtil
 {
-    /**
-     * @deprecated legacy alias to {@link ShopRegistry#configFiles()} (same live map).
-     *             Use the registry; this alias goes away once all callers are migrated.
-     */
-    public static final HashMap<String, CustomConfig> shopConfigFiles = ShopRegistry.getInstance().configFiles();
-    /**
-     * @deprecated legacy alias to {@link ShopRegistry#dirtyFlags()} (same live map).
-     *             Use the registry; this alias goes away once all callers are migrated.
-     */
-    public static final HashMap<String, Boolean> shopDirty = ShopRegistry.getInstance().dirtyFlags();
-
     private ShopUtil()
     {
 

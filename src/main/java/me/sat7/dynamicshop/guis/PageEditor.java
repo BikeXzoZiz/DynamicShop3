@@ -47,7 +47,7 @@ public final class PageEditor extends InGameUI
         this.shopName = shopName;
         this.page = page;
 
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
         maxPage = GetShopMaxPage(shopName);
         page = Clamp(page, 1, maxPage);
 
@@ -164,7 +164,7 @@ public final class PageEditor extends InGameUI
                 boolean isLeft = e.isLeftClick();
                 boolean isPull = e.isShiftClick();
 
-                CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+                CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
                 if(isPull)
                 {
                     PullItem(data, clickedSlot, isLeft);
@@ -273,7 +273,7 @@ public final class PageEditor extends InGameUI
             return;
         }
 
-        CustomConfig data = ShopUtil.shopConfigFiles.get(shopName);
+        CustomConfig data = ShopRegistry.getInstance().getShopConfig(shopName);
 
         if (data.get().getInt("Options.page") > 1)
         {

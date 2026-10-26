@@ -47,7 +47,7 @@ public final class CreateShop extends DSCMD
 
         CustomConfig data = new CustomConfig();
         data.setup(shopname, "Shop");
-        if (!ShopUtil.shopConfigFiles.containsKey(shopname))
+        if (!ShopRegistry.getInstance().hasShop(shopname))
         {
             data.get().set("Options.title", shopname);
             data.get().set("Options.enable", false);

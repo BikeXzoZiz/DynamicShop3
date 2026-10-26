@@ -1,5 +1,6 @@
 package me.sat7.dynamicshop.utilities;
 
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,7 +58,7 @@ public final class TabCompleteUtil
             {
                 if (!ConfigUtil.GetUseShopCommand()) return autoCompleteList;
 
-                for (Map.Entry<String, CustomConfig> entry : ShopUtil.shopConfigFiles.entrySet())
+                for (Map.Entry<String, CustomConfig> entry : ShopRegistry.getInstance().entries())
                 {
                     ConfigurationSection options = entry.getValue().get().getConfigurationSection("Options");
 
@@ -101,13 +102,13 @@ public final class TabCompleteUtil
                     AddToAutoCompleteIfValid(args[0]);
                 } else if (args.length >= 2 && args[0].equals("shop"))
                 {
-                    CustomConfig data = ShopUtil.shopConfigFiles.get(args[1]);
+                    CustomConfig data = ShopRegistry.getInstance().getShopConfig(args[1]);
 
                     if (args.length == 2)
                     {
                         Help.showHelp("shop", (Player) sender, args);
 
-                        for (Map.Entry<String, CustomConfig> entry : ShopUtil.shopConfigFiles.entrySet())
+                        for (Map.Entry<String, CustomConfig> entry : ShopRegistry.getInstance().entries())
                         {
                             ConfigurationSection options = entry.getValue().get().getConfigurationSection("Options");
 
@@ -128,7 +129,7 @@ public final class TabCompleteUtil
                         }
 
                         AddToAutoCompleteIfValid(args[1]);
-                    } else if (args.length >= 3 && (!ShopUtil.shopConfigFiles.containsKey(args[1]) || args[1].length() == 0))
+                    } else if (args.length >= 3 && (!ShopRegistry.getInstance().hasShop(args[1]) || args[1].length() == 0))
                     {
                         return null;
                     } else if (args.length == 3)
@@ -390,7 +391,7 @@ public final class TabCompleteUtil
                             {
                                 if (args[3].equals("linkto") || args[3].equals("transfer"))
                                 {
-                                    temp.addAll(ShopUtil.shopConfigFiles.keySet());
+                                    temp.addAll(ShopRegistry.getInstance().shopNames());
                                 }
 
                                 switch (args[3])
@@ -499,7 +500,7 @@ public final class TabCompleteUtil
                     Help.showHelp("create_shop", (Player) sender, args);
                 } else if (args[0].equalsIgnoreCase("deleteshop") && sender.hasPermission(P_ADMIN_DELETE_SHOP))
                 {
-                    temp.addAll(ShopUtil.shopConfigFiles.keySet());
+                    temp.addAll(ShopRegistry.getInstance().shopNames());
 
                     AddToAutoCompleteIfValid(args[1]);
 
@@ -508,7 +509,7 @@ public final class TabCompleteUtil
                 {
                     if (args.length <= 3)
                     {
-                        temp.addAll(ShopUtil.shopConfigFiles.keySet());
+                        temp.addAll(ShopRegistry.getInstance().shopNames());
 
                         AddToAutoCompleteIfValid(args[args.length - 1]);
                     }
@@ -518,7 +519,7 @@ public final class TabCompleteUtil
                 {
                     if (args.length == 2)
                     {
-                        temp.addAll(ShopUtil.shopConfigFiles.keySet());
+                        temp.addAll(ShopRegistry.getInstance().shopNames());
 
                         AddToAutoCompleteIfValid(args[args.length - 1]);
                     } else if (args.length == 3)
@@ -533,7 +534,7 @@ public final class TabCompleteUtil
                 {
                     if (args.length == 2)
                     {
-                        temp.addAll(ShopUtil.shopConfigFiles.keySet());
+                        temp.addAll(ShopRegistry.getInstance().shopNames());
 
                         AddToAutoCompleteIfValid(args[1]);
                     }
@@ -543,7 +544,7 @@ public final class TabCompleteUtil
                 {
                     if (args.length == 2)
                     {
-                        temp.addAll(ShopUtil.shopConfigFiles.keySet());
+                        temp.addAll(ShopRegistry.getInstance().shopNames());
 
                         AddToAutoCompleteIfValid(args[1]);
                     }
@@ -566,7 +567,7 @@ public final class TabCompleteUtil
                     Help.showHelp("set_tax", (Player) sender, args);
                 } else if (args[0].equalsIgnoreCase("setdefaultshop"))
                 {
-                    temp.addAll(ShopUtil.shopConfigFiles.keySet());
+                    temp.addAll(ShopRegistry.getInstance().shopNames());
 
                     AddToAutoCompleteIfValid(args[1]);
 

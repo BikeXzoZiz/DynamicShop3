@@ -1,7 +1,7 @@
 package me.sat7.dynamicshop.transactions;
 
 import me.sat7.dynamicshop.files.CustomConfig;
-import me.sat7.dynamicshop.utilities.ShopUtil;
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.jupiter.api.AfterEach;
@@ -39,13 +39,13 @@ class CalcGoldenTests
     void registerShop()
     {
         shopYml = new YamlConfiguration();
-        ShopUtil.shopConfigFiles.put(SHOP, new InMemoryConfig(shopYml));
+        ShopRegistry.getInstance().register(SHOP, new InMemoryConfig(shopYml));
     }
 
     @AfterEach
     void unregisterShop()
     {
-        ShopUtil.shopConfigFiles.remove(SHOP);
+        ShopRegistry.getInstance().unregister(SHOP);
     }
 
     // ---------- fixed price (median <= 0 or stock <= 0) ----------
