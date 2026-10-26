@@ -1,7 +1,6 @@
 package me.sat7.dynamicshop;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.pikamug.localelib.LocaleManager;
 import me.sat7.dynamicshop.commands.CMDManager;
 import me.sat7.dynamicshop.commands.Optional;
 import me.sat7.dynamicshop.commands.Root;
@@ -92,7 +91,6 @@ public final class DynamicShop extends JavaPlugin implements Listener
 
     public static UIManager uiManager;
 
-    public static final LocaleManager localeManager = new LocaleManager();
     public static boolean isPapiExist;
 
     public static boolean DEBUG_LOG_ENABLED = false;
@@ -483,6 +481,8 @@ public final class DynamicShop extends JavaPlugin implements Listener
 
     private void makeFolders()
     {
+        getDataFolder().mkdirs(); // User.yml 등 루트 파일이 폴더 생성 전에 먼저 쓰이지 않도록 보장.
+
         File shopFolder = new File(getDataFolder(), "Shop");
         shopFolder.mkdir(); // new 하고 같은줄에서 바로 하면 폴더 안만들어짐.
 

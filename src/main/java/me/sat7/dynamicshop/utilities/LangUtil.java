@@ -1002,9 +1002,9 @@ public final class LangUtil
         if (material != null) {
             String matKey;
             try {
-                matKey = DynamicShop.localeManager.queryMaterial(material, (short)0, null);
+                matKey = material.translationKey();
             } catch (Exception var8) {
-                Bukkit.getLogger().severe("[LocaleLib] Unable to query Material: " + material.name());
+                Bukkit.getLogger().severe("[DynamicShop] Unable to query Material: " + material.name());
                 return false;
             }
 

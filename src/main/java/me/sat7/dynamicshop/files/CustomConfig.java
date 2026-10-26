@@ -28,7 +28,7 @@ public class CustomConfig
             File directory = new File(DynamicShop.plugin.getDataFolder() + "/" + folder);
             if (!directory.exists())
             {
-                directory.mkdir();
+                directory.mkdirs(); // 부모 폴더(Rotation 등)가 없어도 함께 생성.
             }
         }
 

@@ -162,12 +162,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.PikaMug</groupId>
-            <artifactId>LocaleLib</artifactId>
-            <version>3.9</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.black_ixx</groupId>
             <artifactId>playerpoints</artifactId>
             <version>3.2.5</version>
