@@ -8,6 +8,7 @@ import me.sat7.dynamicshop.economyhook.PlayerpointHook;
 import me.sat7.dynamicshop.events.ShopBuySellEvent;
 import me.sat7.dynamicshop.files.CustomConfig;
 import me.sat7.dynamicshop.guis.ItemTrade;
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.utilities.*;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -204,7 +205,7 @@ public final class Buy
         // 커맨드 실행
         RunBuyCommand(data, player, shopName, itemStack, tradeAmount, priceSum);
 
-        ShopUtil.shopDirty.put(shopName, true);
+        ShopRegistry.getInstance().markDirty(shopName);
         DynaShopAPI.openItemTradeGui(player, shopName, tradeIdx);
 
         // 이벤트 호출

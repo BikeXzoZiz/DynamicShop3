@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.sat7.dynamicshop.DynamicShop;
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.utilities.ShopUtil;
 
 import static me.sat7.dynamicshop.constants.Constants.P_ADMIN_DELETE_SHOP;
@@ -41,8 +42,7 @@ public final class DeleteShop extends DSCMD
             CustomConfig data = ShopUtil.shopConfigFiles.get(args[1]);
             data.delete();
 
-            ShopUtil.shopConfigFiles.remove(args[1]);
-            ShopUtil.shopDirty.remove(args[1]);
+            ShopRegistry.getInstance().unregister(args[1]);
             RotationUtil.OnShopDeleted(args[1]);
             UserUtil.ClearTradeLimitData(args[1]);
 

@@ -7,6 +7,7 @@ import me.sat7.dynamicshop.economyhook.PlayerpointHook;
 import me.sat7.dynamicshop.events.ShopBuySellEvent;
 import me.sat7.dynamicshop.files.CustomConfig;
 import me.sat7.dynamicshop.guis.ItemTrade;
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.utilities.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -188,7 +189,7 @@ public final class Sell
         RunSellCommand(data, player, shopName, itemStack, tradeAmount, priceSum, calcResult[1]);
 
         // 더티
-        ShopUtil.shopDirty.put(shopName, true);
+        ShopRegistry.getInstance().markDirty(shopName);
 
         // 이벤트 호출
         if (player != null)
@@ -305,7 +306,7 @@ public final class Sell
         RunSellCommand(data, player, shopName, itemStack, tradeAmount, priceSum, calcResult[1]);
 
         // 더티
-        ShopUtil.shopDirty.put(shopName, true);
+        ShopRegistry.getInstance().markDirty(shopName);
 
         // 이벤트 호출
         ShopBuySellEvent event = new ShopBuySellEvent(false, priceBuyOld, Calc.getCurrentPrice(shopName, tradeIdx, true), priceSellOld, DynaShopAPI.getSellPrice(shopName, itemStack), stockOld, DynaShopAPI.getStock(shopName, itemStack), DynaShopAPI.getMedian(shopName, itemStack), shopName, itemStack, player);

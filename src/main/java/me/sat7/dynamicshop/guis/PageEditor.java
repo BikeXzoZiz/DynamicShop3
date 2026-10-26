@@ -5,6 +5,7 @@ import me.sat7.dynamicshop.DynamicShop;
 import me.sat7.dynamicshop.constants.Constants;
 import me.sat7.dynamicshop.events.OnChat;
 import me.sat7.dynamicshop.files.CustomConfig;
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.utilities.ShopUtil;
 import me.sat7.dynamicshop.utilities.UserUtil;
 import org.bukkit.Bukkit;
@@ -193,7 +194,7 @@ public final class PageEditor extends InGameUI
             data.get().set(from, null);
         }
 
-        ShopUtil.shopDirty.put(shopName, true);
+        ShopRegistry.getInstance().markDirty(shopName);
     }
 
     private void PullItem(CustomConfig data, int index, boolean isLeft)
@@ -211,7 +212,7 @@ public final class PageEditor extends InGameUI
         if ((index + dir >= 0 && isLeft) || (index + dir < maxPage * 45 - 1 && !isLeft))
             PullItem(data, index + dir, isLeft);
 
-        ShopUtil.shopDirty.put(shopName, true);
+        ShopRegistry.getInstance().markDirty(shopName);
     }
 
     private void SetupPageButtons(String shopName, int page)

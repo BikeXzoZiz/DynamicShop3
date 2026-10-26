@@ -1,14 +1,12 @@
 package me.sat7.dynamicshop.utilities;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import lombok.NonNull;
 import me.sat7.dynamicshop.models.DSItem;
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.transactions.Calc;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -26,8 +24,16 @@ import static me.sat7.dynamicshop.utilities.MathUtil.Clamp;
 
 public final class ShopUtil
 {
-    public static final HashMap<String, CustomConfig> shopConfigFiles = new HashMap<>();
-    public static final HashMap<String, Boolean> shopDirty = new HashMap<>();
+    /**
+     * @deprecated legacy alias to {@link ShopRegistry#configFiles()} (same live map).
+     *             Use the registry; this alias goes away once all callers are migrated.
+     */
+    public static final HashMap<String, CustomConfig> shopConfigFiles = ShopRegistry.getInstance().configFiles();
+    /**
+     * @deprecated legacy alias to {@link ShopRegistry#dirtyFlags()} (same live map).
+     *             Use the registry; this alias goes away once all callers are migrated.
+     */
+    public static final HashMap<String, Boolean> shopDirty = ShopRegistry.getInstance().dirtyFlags();
 
     private ShopUtil()
     {
@@ -45,153 +51,23 @@ public final class ShopUtil
 
     public static void ReloadAllShop()
     {
-        shopConfigFiles.clear();
-        shopDirty.clear();
-
-        File[] listOfFiles = new File(DynamicShop.plugin.getDataFolder() + "/Shop").listFiles();
-        if(listOfFiles != null)
-        {
-            for (File f : listOfFiles)
-            {
-                CustomConfig shopCC = new CustomConfig();
-
-                int idx = f.getName().lastIndexOf( "." );
-                String shopName = f.getName().substring(0, idx );
-                shopCC.setup(shopName, "Shop");
-                shopConfigFiles.put(shopName, shopCC);
-                shopDirty.put(shopName, false);
-            }
-        }
+        ShopRegistry.getInstance().loadAll();
     }
 
     public static void SetupSampleShopFile()
     {
-        if(ShopUtil.shopConfigFiles.isEmpty())
-        {
-            CustomConfig data = new CustomConfig();
-            data.setup("SampleShop", "Shop");
-
-            data.get().options().header("Shop name can not contain formatting codes, '/' and ' '");
-            data.get().options().copyHeader(true);
-
-            data.get().set("Options.title", "Sample Shop");
-            data.get().set("Options.lore", "This is sample shop");
-            data.get().set("Options.permission", "");
-            data.get().set("Options.page", 2);
-            data.get().set("Options.currency", Constants.S_VAULT);
-            data.get().set("0.mat", "DIRT");
-            data.get().set("0.value", 1);
-            data.get().set("0.median", 10000);
-            data.get().set("0.stock", 10000);
-            data.get().set("1.mat", "COBBLESTONE");
-            data.get().set("1.value", 1.5);
-            data.get().set("1.median", 10000);
-            data.get().set("1.stock", 10000);
-
-            shopConfigFiles.put("SampleShop", data);
-            shopDirty.put("SampleShop", false);
-
-            data.get().options().copyDefaults(true);
-            data.save();
-        }
+        ShopRegistry.getInstance().setupSampleShop();
     }
 
     // Shop.yml 한덩어리로 되있는 데이터를 새 버전 방식으로 변환함 (v2 -> v3)
     public static void ConvertOldShopData()
     {
-        File file = new File(DynamicShop.plugin.getDataFolder(), "Shop.yml");
-        if (file.exists())
-        {
-            CustomConfig oldShopData = new CustomConfig();
-            oldShopData.setup("Shop", null);
-
-            for(String oldShopName : oldShopData.get().getKeys(false))
-            {
-                ConfigurationSection oldData = oldShopData.get().getConfigurationSection(oldShopName);
-
-                CustomConfig data = new CustomConfig();
-                data.setup(oldShopName, "Shop");
-
-                for(String s : oldData.getKeys(false))
-                {
-                    data.get().set(s, oldData.get(s));
-                }
-
-                if(data.get().contains("Options.hideStock"))
-                {
-                    data.get().set("Options.flag.hidestock", "");
-                    data.get().set("Options.hideStock", null);
-                }
-                if(data.get().contains("Options.hidePricingType"))
-                {
-                    data.get().set("Options.flag.hidepricingtype", "");
-                    data.get().set("Options.hidePricingType", null);
-                }
-                if(!data.get().contains("Options.lore"))
-                {
-                    data.get().set("Options.lore","");
-                }
-
-                data.save();
-
-                ShopUtil.shopConfigFiles.put(oldShopName, data);
-                ShopUtil.shopDirty.put(oldShopName,false);
-            }
-
-            file.delete();
-        }
+        ShopRegistry.getInstance().convertOldShopData();
     }
 
     public static void BackwardCompatibility()
     {
-        int userVersion = ConfigUtil.GetConfigVersion();
-        if (userVersion < 5)
-        {
-            for(Map.Entry<String, CustomConfig> entry : shopConfigFiles.entrySet())
-            {
-                FileConfiguration fc = entry.getValue().get();
-                for(String key : fc.getKeys(false))
-                {
-                    if (fc.contains(key + ".tradeLimitPerPlayer.value"))
-                    {
-                        int old = fc.getInt(key + ".tradeLimitPerPlayer.value");
-                        if (old < 0)
-                        {
-                            fc.set(key + ".tradeLimitPerPlayer.sell", old * -1);
-                        }
-                        else if (old > 0)
-                        {
-                            fc.set(key + ".tradeLimitPerPlayer.buy", old);
-                        }
-
-                        fc.set(key + ".tradeLimitPerPlayer.value", null);
-                    }
-                }
-            }
-        }
-
-        if (userVersion < 7)
-        {
-            for(Map.Entry<String, CustomConfig> entry : shopConfigFiles.entrySet())
-            {
-                FileConfiguration fc = entry.getValue().get();
-                if (fc.contains("Options.flag.jobpoint"))
-                {
-                    fc.set("Options.flag.jobpoint", null);
-                    fc.set("Options.currency", Constants.S_JOBPOINT);
-                }
-                if (fc.contains("Options.flag.playerpoint"))
-                {
-                    fc.set("Options.flag.playerpoint", null);
-                    fc.set("Options.currency", Constants.S_PLAYERPOINT);
-                }
-
-                if (!fc.contains("Options.currency"))
-                {
-                    fc.set("Options.currency", Constants.S_VAULT);
-                }
-            }
-        }
+        ShopRegistry.getInstance().applyBackwardCompatibility();
     }
 
     // 상점에서 빈 슬롯 찾기
@@ -633,10 +509,7 @@ public final class ShopUtil
 
         data.rename(newName);
         data.get().set("Options.title", newName);
-        shopConfigFiles.put(newName, data);
-        shopConfigFiles.remove(shopName);
-        shopDirty.put(newName, false);
-        shopDirty.remove(shopName);
+        ShopRegistry.getInstance().renameRegistration(shopName, newName, data);
 
         RotationUtil.OnShopNameChanged(shopName, newName);
         UserUtil.OnRenameShop(shopName, newName);
@@ -650,8 +523,7 @@ public final class ShopUtil
 
         data.copy(newName);
         data.get().set("Options.title", newName);
-        shopConfigFiles.put(newName, data);
-        shopDirty.put(newName, false);
+        ShopRegistry.getInstance().copyRegistration(newName, data);
 
         RotationUtil.OnShopCopy(shopName, newName);
     }
@@ -703,8 +575,7 @@ public final class ShopUtil
         UserUtil.OnMergeShop(shopA, shopB);
 
         dataB.delete();
-        shopConfigFiles.remove(shopB);
-        shopDirty.remove(shopB);
+        ShopRegistry.getInstance().unregister(shopB);
 
         dataA.save();
         dataA.reload();
@@ -1415,47 +1286,12 @@ public final class ShopUtil
 
     public static void ShopYMLBackup()
     {
-        File[] listOfFiles = new File(DynamicShop.plugin.getDataFolder() + "/Shop").listFiles();
-        if(listOfFiles != null)
-        {
-            long time = System.currentTimeMillis();
-            for (File f : listOfFiles)
-            {
-                String path = DynamicShop.plugin.getDataFolder() + "/Shop_Backup/" + time + "/";
-                File newFile = new File(path + f.getName());
-                try
-                {
-                    FileUtils.copyFile(f, newFile);
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        ShopYMLBackupCull();
+        ShopRegistry.getInstance().backupShopYmls();
     }
 
     public static void ShopYMLBackupCull()
     {
-        File[] listOfFiles = new File(DynamicShop.plugin.getDataFolder() + "/Shop_Backup").listFiles();
-        if(listOfFiles != null)
-        {
-            for(File f : listOfFiles)
-            {
-                int ageMins = (int) (System.currentTimeMillis() - f.lastModified()) / 60000;
-                if (ageMins >= ConfigUtil.GetShopYmlBackup_CullAgeMinutes())
-                {
-                    try
-                    {
-                        FileUtils.deleteDirectory(f);
-                    } catch (IOException e)
-                    {
-                        //e.printStackTrace();
-                    }
-                }
-            }
-        }
+        ShopRegistry.getInstance().cullOldBackups();
     }
 
     public static int GetShopItemCount(String shopName, Boolean excludeInfiniteStock, Boolean excludeFixedPrice)
@@ -1625,27 +1461,12 @@ public final class ShopUtil
 
     public static void SaveDirtyShop()
     {
-        for(Map.Entry<String, Boolean> entry : shopDirty.entrySet())
-        {
-            if(entry.getValue())
-            {
-                if(DynamicShop.DEBUG_MODE)
-                {
-                    DynamicShop.console.sendMessage("DirtyShop Saved: " + entry.getValue());
-                }
-
-                shopDirty.put(entry.getKey(), false);
-                shopConfigFiles.get(entry.getKey()).save();
-            }
-        }
+        ShopRegistry.getInstance().saveDirtyShops();
     }
 
     public static void ForceSaveAllShop()
     {
-        for(Map.Entry<String, CustomConfig> entry : shopConfigFiles.entrySet())
-        {
-            entry.getValue().save();
-        }
+        ShopRegistry.getInstance().forceSaveAll();
     }
 
     public static int GetSellLimitPerPlayer(String shopName, int idx)
@@ -1713,7 +1534,7 @@ public final class ShopUtil
         }
 
         if (somethingChanged)
-            ShopUtil.shopDirty.put(shopName, true);
+            ShopRegistry.getInstance().markDirty(shopName);
 
         return sdf.format(next);
     }

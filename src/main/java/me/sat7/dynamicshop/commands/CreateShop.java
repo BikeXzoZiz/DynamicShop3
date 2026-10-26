@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import me.sat7.dynamicshop.DynaShopAPI;
 import me.sat7.dynamicshop.DynamicShop;
+import me.sat7.dynamicshop.shop.ShopRegistry;
 import me.sat7.dynamicshop.utilities.ShopUtil;
 
 import static me.sat7.dynamicshop.constants.Constants.P_ADMIN_CREATE_SHOP;
@@ -76,8 +77,7 @@ public final class CreateShop extends DSCMD
             data.get().set("0.stock", 10000);
             data.save();
 
-            ShopUtil.shopConfigFiles.put(shopname, data);
-            ShopUtil.shopDirty.put(shopname, false);
+            ShopRegistry.getInstance().register(shopname, data);
 
             sender.sendMessage(DynamicShop.dsPrefix(sender) + t(sender, "MESSAGE.SHOP_CREATED"));
 
